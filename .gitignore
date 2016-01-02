@@ -1,0 +1,10 @@
+### Java template
+out/
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+
+# Created by .ignore support plugin (hsz.mobi)
+/PluginDevelopersToolbox.jar

@@ -18,7 +18,7 @@ Slicy is an awesome tool that will let you create a single PSD file with multipl
 
 The plugin augments this in the following way:
 
-1. The slicy naming convention does not match IDEA for darcula @2x icons. So the plugin will rename any newly created image files matching `fileName_dark@2x.ext` to `fileName_dark@2x.ext`, where ext is `.png`, `.jpg`, `.jpeg` or `.gif`.
+1. The slicy naming convention does not match IDEA for darcula @2x icons. So the plugin will rename any newly created image files matching `fileName_dark@2x.ext` to `fileName@2x_dark.ext`, where ext is `.png`, `.jpg`, `.jpeg` or `.gif`.
 
 2. For each icon you need to create 2 layer groups: `fileName@2x.ext` and `fileName_dark@2x.ext`. This may not seem like much but when you add a new icon you need to copy and rename 2 layer groups, and make sure you match the naming convention for each layer. This plugin will let you just create a template of layer groups to be reused for each icon:
 

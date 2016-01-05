@@ -25,7 +25,12 @@
     </unboundedVersionInspectionSettings>
     <customRepositories />
   </component>
-  <component name="CopyrightManager" default="" />
+  <component name="CopyrightManager" default="PluginDevelopersToolbox">
+    <copyright>
+      <option name="notice" value="Copyright (c) 2015-&amp;#36;{today.year} Vladimir Schneider &lt;vladimir.schneider@gmail.com&gt;&#10;&#10;Licensed to the Apache Software Foundation (ASF) under one&#10;or more contributor license agreements.  See the NOTICE file&#10;distributed with this work for additional information&#10;regarding copyright ownership.  The ASF licenses this file&#10;to you under the Apache License, Version 2.0 (the&#10;&quot;License&quot;); you may not use this file except in compliance&#10;with the License.  You may obtain a copy of the License at&#10;&#10;  http://www.apache.org/licenses/LICENSE-2.0&#10;&#10;Unless required by applicable law or agreed to in writing,&#10;software distributed under the License is distributed on an&#10;&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY&#10;KIND, either express or implied.  See the License for the&#10;specific language governing permissions and limitations&#10;under the License." />
+      <option name="myName" value="PluginDevelopersToolbox" />
+    </copyright>
+  </component>
   <component name="Encoding">
     <file url="PROJECT" charset="UTF-8" />
   </component>
@@ -43,6 +48,9 @@
     <option name="PROJECT_PROFILE" value="Project Default" />
     <option name="USE_PROJECT_PROFILE" value="true" />
     <version value="1.0" />
+  </component>
+  <component name="KannotatorSettings">
+    <option name="dismissedInVersion" value="0.2.1205" />
   </component>
   <component name="Kotlin2JsCompilerArguments">
     <option name="sourceMap" value="true" />
@@ -175,6 +183,16 @@
       </item>
     </group>
   </component>
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <XML>
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
+      </value>
+    </option>
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Vlad" />
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -195,5 +213,6 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/PluginDevelopersToolbox.wiki" vcs="Git" />
   </component>
 </project>

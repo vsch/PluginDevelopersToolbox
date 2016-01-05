@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2016 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,7 +25,9 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.vfs.*
+import com.intellij.psi.PsiManager
 import com.intellij.util.Alarm
 import com.vladsch.PluginDevelopersToolbox.Bundle
 import org.apache.log4j.Logger
@@ -101,9 +103,11 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     override fun fileCreated(event: VirtualFileEvent) {
-        val parent = event.parent
-        if (event.isFromRefresh && !event.file.isDirectory && parent != null && event.file.extension in IMAGE_EXTENSIONS) {
-            val pattern = Pattern.compile("^(.*)_dark@2x\\.(.*)$")
+        val parent = event.parent ?:  return
+        if (PsiManager.getInstance(myProject).findDirectory(parent) == null) return // not in our project
+
+        if (event.isFromRefresh && !event.file.isDirectory && event.file.extension in IMAGE_EXTENSIONS) {
+            val pattern = Pattern.compile("^(.+)_dark@2x\\.(.*)$")
             val matcher = pattern.matcher(event.fileName)
             if (matcher.matches()) {
                 val matchResult = matcher.toMatchResult()
@@ -132,6 +136,64 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                         }
                     }
                 }
+            }
+        } else if (event.isFromRefresh && event.file.isDirectory && event.file.extension == "+" && event.file.isValid) {
+            // take the directory name  (less extension) add file name by stripping the leading - in file name and put it into the parent
+            // directory while deleting this directory
+            val namePrefix = event.file.nameWithoutExtension
+            var allProcessed = true
+
+            for (file in event.file.children) {
+                var fileProcessed = false
+                if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
+                    // our candidate
+                    var removedPrefix = file.nameWithoutExtension.removePrefix("+")
+                    if (removedPrefix == "_dark@2x") removedPrefix = "@2x_dark"
+                    val newName = namePrefix + removedPrefix + '.' + file.extension
+                    val virtualFile = parent.findChild(newName)
+
+                    if (virtualFile != null && virtualFile.exists()) {
+                        try {
+                            virtualFile.delete(this)
+                        } catch (e: IOException) {
+                            addNotificationItem(Bundle.message("plugin.action.file-delete-failed", newName))
+                            e.printStackTrace()
+                        }
+                    }
+
+                    try {
+                        file.copy(this, parent, newName)
+                        try {
+                            file.delete(this)
+                            fileProcessed = true
+                            addNotificationItem(Bundle.message("plugin.action.file-moved", namePrefix + "+/" + file.name, newName))
+                        } catch (e: IOException) {
+                            addNotificationItem(Bundle.message("plugin.action.file-delete-failed", newName))
+                            e.printStackTrace()
+                        }
+                    } catch (e: IOException) {
+                        addNotificationItem(Bundle.message("plugin.action.file-copy-failed", file.name, newName))
+                    }
+                }
+
+                if (!fileProcessed) {
+                    allProcessed = false
+                }
+            }
+
+            if (allProcessed) {
+                // remove the directory
+                try {
+                    event.file.delete(this)
+                } catch (e: IOException) {
+                    addNotificationItem(Bundle.message("plugin.action.file-delete-failed", event.fileName))
+                    allProcessed = false
+                    e.printStackTrace()
+                }
+            }
+
+            if (!allProcessed) {
+                addNotificationItem(Bundle.message("plugin.action.file-delete-not-done", event.fileName))
             }
         }
     }

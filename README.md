@@ -1,6 +1,6 @@
 # Plugin Developer's Toolbox
 
-A collection of useful functions for plugin developers. It is something I plan on expanding as I get to implement features that I find useful in development of the idea-multimarkdown plugin. 
+A collection of useful functions for plugin developers. I use it in the development of the idea-multimarkdown plugin.
 
 [Version Notes]
 

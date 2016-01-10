@@ -27,7 +27,9 @@
 
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <p>A collection of useful functions for plugin developers. I use it in the development of the idea-multimarkdown plugin.</p>
+            <img src="https://raw.githubusercontent.com/vsch/PluginDevelopersToolbox/master/assets/images/ScreenShot_sequence_1x.png" border="0" width="414" height="155"
+                    alt="Screenshot">
+            <p>For now only one very useful function: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover/renamer.</p>
             <p><strong>Plugin website: <a href="http://github.com/vsch/PluginDevelopersToolbox"><span style="color:#30A0D8">Plugin Developer's Toolbox GitHub Repo</span></a></strong></p>
             <p><strong>Bug tracking & feature requests: <a href="https://github.com/vsch/PluginDevelopersToolbox/issues"><span style="color:#30A0D8">Plugin Developer's Toolbox GitHub Issues</span></a></strong></p>
             <!--<p><strong>Documentation: <a href="https://github.com/vsch/idea-multimarkdown/wiki"><span style="color:#30A0D8">MultiMarkdown GitHub Wiki page.</span></a></strong>--></p>
@@ -35,6 +37,12 @@
         ]]></description>
 
     <change-notes><![CDATA[
+        <ul>
+            <h3>1.0.1 - Bug Fix and Notification Cleanup</h3>
+            <li>Fix: #1, Handling of one level directory nesting of Slicy generated directories.</li>
+            <li>Change: Cleaned up notification of nested files to be useful and cleaner, initail one looked more like a debug trace than a notification</li>
+            <li>Add: Screenshot to pluing information and readme files</li>
+        </ul>
         <ul>
             <h3>1.0.0 - Initial Release</h3>
             <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>

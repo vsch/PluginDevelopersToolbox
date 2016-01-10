@@ -193,6 +193,13 @@
     </option>
     <option name="PREFERRED_PROJECT_CODE_STYLE" value="Vlad" />
   </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="vlad">
+      <words>
+        <w>slicy</w>
+      </words>
+    </dictionary>
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />

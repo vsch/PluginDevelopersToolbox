@@ -24,9 +24,9 @@ import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
 
-public class PluginDevelopersToolbox {
+public class PluginDevelopersToolboxIcons {
     private static Icon load(String path) {
-        return IconLoader.getIcon(path, PluginDevelopersToolbox.class);
+        return IconLoader.getIcon(path, PluginDevelopersToolboxIcons.class);
     }
 
     public static class EditorActions {

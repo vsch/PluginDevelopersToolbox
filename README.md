@@ -4,9 +4,11 @@ A collection of useful functions for plugin developers. I use it in the developm
 
 [Version Notes]
 
-## Version 1.0.0 Initial Release
+## Version 1.0 Initial Release
 
 For now it is just one extremely useful function if you use [Slicy] for extracting icon images from PSD files. 
+
+![Screen Shot sequence](assets/images/ScreenShot_sequence_4x.png)
 
 ### Slicy File Post-Processor
 

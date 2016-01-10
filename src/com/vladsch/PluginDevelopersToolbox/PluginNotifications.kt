@@ -29,12 +29,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.xml.util.XmlStringUtil
-import com.vladsch.PluginDevelopersToolbox.Bundle
 
 object PluginNotifications {
 
-    val NOTIFICATION_GROUP_UPDATE = "PluginDevelopersToolbox Update"
-    val NOTIFICATION_GROUP_ACTION = "PluginDevelopersToolbox File Action"
+    val NOTIFICATION_GROUP_UPDATE = NotificationGroup("PluginDevelopersToolbox Update", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_ACTION = NotificationGroup("PluginDevelopersToolbox File Action", NotificationDisplayType.BALLOON, true, null)
     val NOTIFICATION_GROUP_DEFAULT = NOTIFICATION_GROUP_ACTION
 
     fun applyHtmlColors(htmlText: String): String {
@@ -46,6 +45,19 @@ object PluginNotifications {
     }
 
     fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = "ENHANCED"): String {
+        val features = processDashStarPage(processDashStarItems(featureList,enhAttr),titleHtml)
+        return applyHtmlColors(features)
+    }
+
+    fun processDashStarPage(featuresListHtml: String, titleHtml: String? = null): String {
+        val features = featuresListHtml.wrapWith((if (titleHtml != null && !titleHtml.isEmpty()) """
+<h4 style="margin: 0; font-size: ${JBUI.scale(10)}px">$titleHtml</h4>""" else "")+"""
+<ul style="margin-left: ${JBUI.scale(10)}px;">
+""", "</ul>")
+        return applyHtmlColors(features)
+    }
+
+    fun processDashStarItems(featureList: String, enhAttr: String = "ENHANCED"): String {
         //        val featureList = """
         //- Preferences now under <b>Languages & Frameworks</b>
         //- Improved preview update performance
@@ -68,38 +80,18 @@ object PluginNotifications {
                     if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<span style=\"color: [[$enhAttr]]\">", "</span>")
                     else item.removePrefix("-").trim()
                     ).wrapWith("<li>", "</li>")
-        }.wrapWith((if (titleHtml != null && !titleHtml.isEmpty()) """<h4 style="margin: 0; font-size: ${JBUI.scale(10)}px">$titleHtml</h4>""" else "")+"""
-<ul style="margin-left: ${JBUI.scale(10)}px;">
-""", "</ul>")
-        return applyHtmlColors(features);
+        }
+
+        return features
     }
 
     fun makeNotification(message: String,
                          title: String = Bundle.message("plugin.name"),
                          listener: NotificationListener? = null,
                          notificationType: NotificationType = NotificationType.INFORMATION,
-                         issueNotificationGroup: NotificationGroup = NotificationGroup(NOTIFICATION_GROUP_DEFAULT, NotificationDisplayType.BALLOON, true, null),
+                         issueNotificationGroup: NotificationGroup = NOTIFICATION_GROUP_DEFAULT,
                          project: Project? = null
     ) {
-
-        //        val listener = NotificationListener { notification, hyperlinkEvent ->
-        //            //notification.expire();
-        //            if (hyperlinkEvent.url == null) {
-        //                val link = hyperlinkEvent.description
-        //                when (link) {
-        //                    ":DISABLE" -> {
-        //                        settings.licenseSettings.showFeatureUpdates = false
-        //                        notification.expire()
-        //                    }
-        //                    ":BUY" -> BrowserUtil.browse (href + "product/multimarkdown/buy")
-        //                    ":TRY" -> BrowserUtil.browse (href + "product/multimarkdown/try")
-        //                    ":SPECIALS" -> BrowserUtil.browse (href + "product/multimarkdown/specials")
-        //                    ":FEATURES" -> BrowserUtil.browse (href + "product/multimarkdown")
-        //                }
-        //            } else {
-        //                BrowserUtil.browse (hyperlinkEvent.url.toString())
-        //            }
-        //        }
 
         val basicListener = listener ?: NotificationListener { notification, hyperlinkEvent ->
             //notification.expire();
@@ -108,7 +100,7 @@ object PluginNotifications {
             }
         }
 
-        issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, listener).notify(project)
+        issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, basicListener).notify(project)
     }
 }
 

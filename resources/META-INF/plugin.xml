@@ -22,7 +22,7 @@
 <idea-plugin version="2">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
 
     <description><![CDATA[

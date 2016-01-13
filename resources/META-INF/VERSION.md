@@ -1,3 +1,7 @@
+### 1.0.3 - Bug Fix
+
+- Add: plugin version number to notification title 
+
 ### 1.0.2 - Bug Fix
 
 - Fix: #2, Change delete/rename and delete/copy operations used to process slicy files into copy contents then delete slicy generated file. Otherwise the files can become un-tracked under VCS because they were deleted.

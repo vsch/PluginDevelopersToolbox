@@ -86,7 +86,7 @@ object PluginNotifications {
     }
 
     fun makeNotification(message: String,
-                         title: String = Bundle.message("plugin.name"),
+                         title: String = Bundle.message("plugin.name") + " (" + PluginProjectComponent.productVersion + ")",
                          listener: NotificationListener? = null,
                          notificationType: NotificationType = NotificationType.INFORMATION,
                          issueNotificationGroup: NotificationGroup = NOTIFICATION_GROUP_DEFAULT,

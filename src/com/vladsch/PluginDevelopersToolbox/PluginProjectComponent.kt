@@ -21,9 +21,12 @@
 
 package com.vladsch.PluginDevelopersToolbox
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor
+import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.project.Project
@@ -293,7 +296,69 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     companion object {
+        private val PLUGIN_ID = "com.vladsch.PluginDevelopersToolbox"
         @JvmStatic @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
         private val logger = Logger.getLogger(PluginProjectComponent::class.java)
+
+        @JvmStatic
+        val productName: String
+            get() = PLUGIN_ID.substring(PLUGIN_ID.lastIndexOf('.') + 1)
+
+        @JvmStatic fun getPluginDescriptor(pluginId: String): IdeaPluginDescriptor? {
+            val plugins = PluginManager.getPlugins()
+            for (plugin in plugins) {
+                if (pluginId == plugin.pluginId.idString) {
+                    return plugin
+                }
+            }
+            return null;
+        }
+
+        @JvmStatic val pluginDescriptor: IdeaPluginDescriptor
+            get() {
+                val plugins = PluginManager.getPlugins()
+                for (plugin in plugins) {
+                    if (PLUGIN_ID == plugin.pluginId.idString) {
+                        return plugin
+                    }
+                }
+
+                throw IllegalStateException("Unexpected, plugin cannot find its own plugin descriptor")
+            }
+
+        @JvmStatic
+        val productVersion: String
+            get() {
+                val pluginDescriptor = pluginDescriptor
+                val version = pluginDescriptor.version
+                // truncate version to 3 digits and if had more than 3 append .x, that way
+                // no separate product versions need to be created
+                val parts = version.split(delimiters = '.', limit = 4)
+                if (parts.size <= 3) {
+                    return version
+                }
+
+                val newVersion = parts.subList(0, 3).reduce { total, next -> total + "." + next }
+                return newVersion + ".x"
+            }
+
+        @JvmStatic
+        fun getPluginPath(): String? {
+            val variants = arrayOf(PathManager.getHomePath(), PathManager.getPluginsPath())
+
+            for (variant in variants) {
+                val path = variant + "/" + productName
+                if (LocalFileSystem.getInstance().findFileByPath(path) != null) {
+                    return path
+                }
+            }
+            return null
+        }
+
+        @JvmStatic
+        fun getPluginFilePath(fileName: String): String? {
+            val path = getPluginPath()
+            return path.ifNotNull { path.suffixWith('/') + fileName }
+        }
     }
 }

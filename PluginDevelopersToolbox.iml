@@ -9,5 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Kotlin" level="application" />
+    <orderEntry type="library" scope="TEST" name="Kotlin-Test" level="application" />
   </component>
 </module>

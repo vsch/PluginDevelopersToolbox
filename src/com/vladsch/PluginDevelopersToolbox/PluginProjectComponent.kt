@@ -22,20 +22,16 @@
 package com.vladsch.PluginDevelopersToolbox
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.Application
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.vfs.*
 import com.intellij.psi.PsiManager
 import com.intellij.util.Alarm
-import com.vladsch.PluginDevelopersToolbox.Bundle
 import org.apache.log4j.Logger
 import org.jetbrains.annotations.NonNls
-
 import java.io.IOException
 import java.util.regex.Pattern
 
@@ -141,7 +137,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         //updateHighlighters();
     }
 
-    fun invokeLaterInWriteAction(runnable:()->Unit) {
+    fun invokeLaterInWriteAction(runnable: () -> Unit) {
         ApplicationManager.getApplication().invokeLater() {
             WriteCommandAction.runWriteCommandAction(myProject, runnable)
         }
@@ -180,45 +176,36 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         }
     }
 
+    private fun processSlicyFile(file: VirtualFile, parent: VirtualFile, parentItem: String?) {
+        val pattern = Pattern.compile("^(.+)_dark@2x\\.([^.]*)$")
+        val matcher = pattern.matcher(file.name)
+        if (matcher.matches()) {
+            val matchResult = matcher.toMatchResult()
+            if (matchResult.groupCount() == 2) {
+                val prefix = matchResult.group(1)
+                val extension = matchResult.group(2)
+                if (prefix != null && extension != null) {
+                    // matched, either copy contents if exists, or rename
+                    val newName = "$prefix@2x_dark.$extension"
+                    processFile(file, newName, parent, parentItem)
+                }
+            }
+        }
+    }
+
     private fun processSlicyDirectory(directory: VirtualFile, parent: VirtualFile, parentItem: String?) {
         val namePrefix = directory.nameWithoutExtension
         var allProcessed = true
 
         for (file in directory.children) {
-            var fileProcessed = false
             if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
                 // our candidate
                 var removedPrefix = file.nameWithoutExtension.removePrefix("+")
                 if (removedPrefix == "_dark@2x") removedPrefix = "@2x_dark"
                 val newName = namePrefix + removedPrefix + '.' + file.extension
-                val virtualFile = parent.findChild(newName)
-
-                if (virtualFile != null && virtualFile.exists()) {
-                    try {
-                        virtualFile.delete(this)
-                    } catch (e: IOException) {
-                        addNotificationItem(Bundle.message("plugin.action.file-delete-failed", newName), parentItem)
-                        e.printStackTrace()
-                    }
+                if (!processFile(file, newName, parent, parentItem)) {
+                    allProcessed = false
                 }
-
-                try {
-                    file.copy(this, parent, newName)
-                    try {
-                        file.delete(this)
-                        fileProcessed = true
-                        addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
-                    } catch (e: IOException) {
-                        addNotificationItem(Bundle.message("plugin.action.file-delete-failed", newName), parentItem)
-                        e.printStackTrace()
-                    }
-                } catch (e: IOException) {
-                    addNotificationItem(Bundle.message("plugin.action.file-copy-failed", file.name, newName), parentItem)
-                }
-            }
-
-            if (!fileProcessed) {
-                allProcessed = false
             }
         }
 
@@ -238,37 +225,42 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         }
     }
 
-    private fun processSlicyFile(file: VirtualFile, parent: VirtualFile, parentItem: String?) {
-        val pattern = Pattern.compile("^(.+)_dark@2x\\.(.*)$")
-        val matcher = pattern.matcher(file.name)
-        if (matcher.matches()) {
-            val matchResult = matcher.toMatchResult()
-            if (matchResult.groupCount() == 2) {
-                val prefix = matchResult.group(1)
-                val extension = matchResult.group(2)
-                if (prefix != null && extension != null) {
-                    // matched, move it by first deleting the old file and renaming this one
-                    val newName = "$prefix@2x_dark.$extension"
-                    val virtualFile = parent.findChild(newName)
+    private fun processFile(file: VirtualFile, newName: String, parent: VirtualFile, parentItem: String?): Boolean {
+        var fileProcessed = false
+        val newFile = parent.findChild(newName)
 
-                    if (virtualFile != null && virtualFile.exists()) {
-                        try {
-                            virtualFile.delete(this)
-                        } catch (e: IOException) {
-                            addNotificationItem(Bundle.message("plugin.action.file-delete-failed", newName), parentItem)
-                            e.printStackTrace()
-                        }
-                    }
+        if (newFile != null && newFile.exists()) {
+            try {
+                // copy contents
+                newFile.setBinaryContent(file.contentsToByteArray())
 
-                    try {
-                        file.rename(this, newName)
-                        addNotificationItem(Bundle.message("plugin.action.file-processed", file.name), parentItem)
-                    } catch (e: IOException) {
-                        addNotificationItem(Bundle.message("plugin.action.file-rename-failed", file.name, newName), parentItem)
-                    }
+                try {
+                    file.delete(this)
+                    fileProcessed = true
+                    addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
+                } catch (e: IOException) {
+                    addNotificationItem(Bundle.message("plugin.action.file-delete-failed", file.name, newName), parentItem)
                 }
+            } catch (e: IOException) {
+                addNotificationItem(Bundle.message("plugin.action.file-copy-failed", file.name, newName), parentItem)
+                e.printStackTrace()
+            }
+        } else {
+            try {
+                file.rename(this, newName)
+                try {
+                    file.move(this, parent)
+                    fileProcessed = true
+                    addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
+                } catch (e: IOException) {
+                    addNotificationItem(Bundle.message("plugin.action.file-move-failed", file.name, file.parent.name, parent.name), parentItem)
+                    e.printStackTrace()
+                }
+            } catch (e: IOException) {
+                addNotificationItem(Bundle.message("plugin.action.file-rename-failed", file.name, newName), parentItem)
             }
         }
+        return fileProcessed
     }
 
     override fun fileDeleted(event: VirtualFileEvent) {

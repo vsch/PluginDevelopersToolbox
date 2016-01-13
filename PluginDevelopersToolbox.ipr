@@ -191,7 +191,7 @@
         </XML>
       </value>
     </option>
-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Vlad" />
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
   </component>
   <component name="ProjectDictionaryState">
     <dictionary name="vlad">

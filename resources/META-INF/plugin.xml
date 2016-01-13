@@ -44,9 +44,11 @@
 
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <h3>1.0.3 - Bug Fix</h3>
+            <h3>1.0.3 - Min Java Version Fix &amp; Kotlin Runtime</h3>
             <ul>
                 <li>Add: plugin version number to notification title</li>
+                <li>Fix: min java version 1.6</li>
+                <li>Add: Kotlin run-time jars to distribution</li>
             </ul>
             <h3>1.0.2 - Bug Fix</h3>
             <ul>

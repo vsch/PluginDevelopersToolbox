@@ -1,6 +1,8 @@
-### 1.0.3 - Bug Fix
+### 1.0.3 - Min Java Version Fix & Kotlin Runtime
 
 - Add: plugin version number to notification title 
+- Fix: min java version 1.6 
+- Add: Kotlin run-time jars to distribution
 
 ### 1.0.2 - Bug Fix
 

@@ -1,3 +1,11 @@
+### 1.0.4 - Bug Fix
+
+- Add: META-INF to distribution zip 
+- Fix: #3, When a file in a subdirectory is first created by Slicy plugin gives an erroneous warning that file move failed
+- Fix: #4, Need to have sticky balloon notifications if they contain errors
+- Change: update Kotlin runtime to 1.0.0-release-IJ143-70 
+- Change: only files located under the project base directory will be processed, otherwise multiple open projects would attempt to process the same files. Now only the project that contains the files under its base directory will process the files.  
+
 ### 1.0.3 - Min Java Version Fix & Kotlin Runtime
 
 - Add: plugin version number to notification title 

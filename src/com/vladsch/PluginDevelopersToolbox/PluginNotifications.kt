@@ -33,8 +33,11 @@ import com.intellij.xml.util.XmlStringUtil
 object PluginNotifications {
 
     val NOTIFICATION_GROUP_UPDATE = NotificationGroup("PluginDevelopersToolbox Update", NotificationDisplayType.STICKY_BALLOON, true, null)
-    val NOTIFICATION_GROUP_ACTION = NotificationGroup("PluginDevelopersToolbox File Action", NotificationDisplayType.BALLOON, true, null)
+    val NOTIFICATION_GROUP_ACTION = NotificationGroup("PluginDevelopersToolbox File Action", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_ACTION_ERRORS = NotificationGroup("PluginDevelopersToolbox File Action with errors", NotificationDisplayType.STICKY_BALLOON, true, null)
     val NOTIFICATION_GROUP_DEFAULT = NOTIFICATION_GROUP_ACTION
+
+    val DEFAULT_ALT_ATTR = "BUY"
 
     fun applyHtmlColors(htmlText: String): String {
         val isDarkUITheme = UIUtil.isUnderDarcula()
@@ -44,7 +47,7 @@ object PluginNotifications {
         return htmlText.replace("[[ENHANCED]]", enhColor).replace("[[BUY]]", buyColor).replace("[[SPECIALS]]", specialsColor)
     }
 
-    fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = "ENHANCED"): String {
+    fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = DEFAULT_ALT_ATTR): String {
         val features = processDashStarPage(processDashStarItems(featureList,enhAttr),titleHtml)
         return applyHtmlColors(features)
     }
@@ -57,7 +60,7 @@ object PluginNotifications {
         return applyHtmlColors(features)
     }
 
-    fun processDashStarItems(featureList: String, enhAttr: String = "ENHANCED"): String {
+    fun processDashStarItems(featureList: String, enhAttr: String = DEFAULT_ALT_ATTR): String {
         //        val featureList = """
         //- Preferences now under <b>Languages & Frameworks</b>
         //- Improved preview update performance

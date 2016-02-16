@@ -19,10 +19,10 @@
   ~ under the License.
   -->
 
-<idea-plugin version="2">
+<idea-plugin version="2" url="http://github.com/vsch/PluginDevelopersToolbox" xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
 
     <description><![CDATA[
@@ -42,31 +42,7 @@
         ]]>
     </description>
 
-    <change-notes><![CDATA[
-        <div xmlns="http://www.w3.org/1999/html">
-            <h3>1.0.3 - Min Java Version Fix &amp; Kotlin Runtime</h3>
-            <ul>
-                <li>Add: plugin version number to notification title</li>
-                <li>Fix: min java version 1.6</li>
-                <li>Add: Kotlin run-time jars to distribution</li>
-            </ul>
-            <h3>1.0.2 - Bug Fix</h3>
-            <ul>
-                <li>Fix: #2, Change delete/rename and delete/copy operations used to process slicy files into copy contents then delete slicy generated file. Otherwise the files can become un-tracked under VCS because they were deleted.</li>
-            </ul>
-            <h3>1.0.1 - Bug Fix and Notification Cleanup</h3>
-            <ul>
-                <li>Fix: #1, Handling of one level directory nesting of Slicy generated directories.</li>
-                <li>Change: Cleaned up notification of nested files to be useful and cleaner, initial one looked more like a debug trace than a notification</li>
-                <li>Add: Screenshot to plugin information and readme files</li>
-            </ul>
-            <h3>1.0.0 - Initial Release</h3>
-            <ul>
-                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>
-                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
-            </ul>
-        </div>
-        ]]></change-notes>
+    <xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="141.0"/>

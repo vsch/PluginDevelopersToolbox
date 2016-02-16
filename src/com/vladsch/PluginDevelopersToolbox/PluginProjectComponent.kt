@@ -23,6 +23,7 @@ package com.vladsch.PluginDevelopersToolbox
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
@@ -30,8 +31,10 @@ import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.vfs.*
 import com.intellij.psi.PsiManager
+import com.intellij.psi.search.FilenameIndex
 import com.intellij.util.Alarm
 import org.apache.log4j.Logger
 import org.jetbrains.annotations.NonNls
@@ -39,6 +42,7 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 class PluginProjectComponent(val myProject: Project) : ProjectComponent, VirtualFileListener, Disposable, Runnable {
+    private val logger = com.intellij.openapi.diagnostic.Logger.getInstance("com.vladsch.PluginDevelopersToolbox")
 
     private val mySwingAlarm = Alarm(Alarm.ThreadToUse.SWING_THREAD, this)
     private val REQUESTS_LOCK = Object()
@@ -46,6 +50,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     private val myNotifyList = StringBuilder()
     private val myNotifyMessage = StringBuilder()
     private var myLastParentItem: String? = null
+    private var myHadErrors = false
 
     override fun dispose() {
 
@@ -73,7 +78,8 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     override fun run() {
-        var message: String = "";
+        var message: String = ""
+        var hadErrors = false
         synchronized (REQUESTS_LOCK) {
             myLastRequest = null
 
@@ -84,14 +90,19 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             myNotifyMessage.append(PluginNotifications.processDashStarItems(myNotifyList.toString()))
             myNotifyList.delete(0, myNotifyList.length)
 
+            hadErrors = myHadErrors
             message = myNotifyMessage.toString();
             //            println(message)
             myNotifyMessage.delete(0, myNotifyMessage.length)
+            myHadErrors = false
         }
 
         val messageHtml = PluginNotifications.processDashStarPage(message, Bundle.message("plugin.action.files-moved.title"))
         //        println(messageHtml)
-        PluginNotifications.makeNotification(messageHtml, project = this.myProject)
+        val notificationType = if (hadErrors) NotificationType.WARNING else NotificationType.INFORMATION
+        val notificationGroup = if (hadErrors) PluginNotifications.NOTIFICATION_GROUP_ACTION_ERRORS else PluginNotifications.NOTIFICATION_GROUP_ACTION
+        logger.debug("generating notification")
+        PluginNotifications.makeNotification(messageHtml, project = this.myProject, notificationType = notificationType, issueNotificationGroup = notificationGroup)
     }
 
     private fun openParentItem(parentItem: String?) {
@@ -110,6 +121,8 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
 
     fun addNotificationItem(item: String, parentItem: String?) {
         synchronized (REQUESTS_LOCK) {
+            if (item.startsWith("*")) myHadErrors = true
+
             val lastRequest = myLastRequest
             if (lastRequest != null) {
                 mySwingAlarm.cancelRequest(lastRequest)
@@ -149,7 +162,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     override fun fileCreated(event: VirtualFileEvent) {
         val parent = event.parent ?: return
         val file = event.file
-        if (!event.isFromRefresh || !file.isValid || PsiManager.getInstance(myProject).findDirectory(parent) == null) return // not in our project
+        if (!event.isFromRefresh || !file.isValid || myProject.basePath == null || !parent.path.startsWith(myProject.basePath!!.suffixWith('/'))) return // not in our project
 
         if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
             invokeLaterInWriteAction() {
@@ -219,7 +232,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             } catch (e: IOException) {
                 addNotificationItem(Bundle.message("plugin.action.file-delete-failed", directory.name), parentItem)
                 allProcessed = false
-                e.printStackTrace()
+                logger.info(e);
             }
         }
 
@@ -246,18 +259,18 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 }
             } catch (e: IOException) {
                 addNotificationItem(Bundle.message("plugin.action.file-copy-failed", file.name, newName), parentItem)
-                e.printStackTrace()
+                logger.info(e)
             }
         } else {
             try {
                 file.rename(this, newName)
                 try {
-                    file.move(this, parent)
+                    if (file.parent !== parent) file.move(this, parent)
                     fileProcessed = true
                     addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
                 } catch (e: IOException) {
                     addNotificationItem(Bundle.message("plugin.action.file-move-failed", file.name, file.parent.name, parent.name), parentItem)
-                    e.printStackTrace()
+                    logger.info(e)
                 }
             } catch (e: IOException) {
                 addNotificationItem(Bundle.message("plugin.action.file-rename-failed", file.name, newName), parentItem)
@@ -297,8 +310,8 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
 
     companion object {
         private val PLUGIN_ID = "com.vladsch.PluginDevelopersToolbox"
-        @JvmStatic @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        private val logger = Logger.getLogger(PluginProjectComponent::class.java)
+        @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
+        private val logger = com.intellij.openapi.diagnostic.Logger.getInstance("com.vladsch.slicy-mover")
 
         @JvmStatic
         val productName: String

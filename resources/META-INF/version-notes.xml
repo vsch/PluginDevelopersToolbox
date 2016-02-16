@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin version="2">
+    <change-notes><![CDATA[
+        <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.0.4 - Bug Fix</h3>
+            <ul>
+                <li>Add: META-INF to distribution zip</li>
+                <li>Fix: #3, When a file in a subdirectory is first created by Slicy plugin gives an erroneous warning that file move failed</li>
+                <li>Fix: #4, Need to have sticky balloon notifications if they contain errors</li>
+                <li>Change: update Kotlin runtime to 1.0.0-release-IJ143-70</li>
+                <li>Change: only files located under the project base directory will be processed, otherwise multiple open projects would attempt to process the same files. Now only the project that contains the files under its base directory will process the files.</li>
+            </ul>
+            <h3>1.0.3 - Min Java Version Fix &amp; Kotlin Runtime</h3>
+            <ul>
+                <li>Add: plugin version number to notification title</li>
+                <li>Fix: min java version 1.6</li>
+                <li>Add: Kotlin run-time jars to distribution</li>
+            </ul>
+            <h3>1.0.2 - Bug Fix</h3>
+            <ul>
+                <li>Fix: #2, Change delete/rename and delete/copy operations used to process slicy files into copy contents then delete slicy generated file. Otherwise the files can become un-tracked under VCS because they were deleted.</li>
+            </ul>
+            <h3>1.0.1 - Bug Fix and Notification Cleanup</h3>
+            <ul>
+                <li>Fix: #1, Handling of one level directory nesting of Slicy generated directories.</li>
+                <li>Change: Cleaned up notification of nested files to be useful and cleaner, initial one looked more like a debug trace than a notification</li>
+                <li>Add: Screenshot to plugin information and readme files</li>
+            </ul>
+            <h3>1.0.0 - Initial Release</h3>
+            <ul>
+                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>
+                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see  <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
+            </ul>
+        </div>
+        ]]></change-notes>
+
+</idea-plugin>

@@ -1,0 +1,3 @@
+[submodule "PluginDevelopersToolbox.wiki"]
+	path = PluginDevelopersToolbox.wiki
+	url = https://github.com/vsch/PluginDevelopersToolbox.wiki.git

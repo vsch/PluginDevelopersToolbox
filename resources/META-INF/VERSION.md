@@ -1,3 +1,7 @@
+### 1.0.5 - Bug Fix
+
+- Add: skipping of files whose content has not changed to prevent unnecessary VCS caused thrashing.
+
 ### 1.0.4 - Bug Fix
 
 - Add: META-INF to distribution zip 

@@ -2,6 +2,10 @@
 <idea-plugin version="2">
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.0.5 - Bug Fix</h3>
+            <ul>
+                <li>Add: skipping of files whose content has not changed to prevent unnecessary VCS caused thrashing.</li>
+            </ul>
             <h3>1.0.4 - Bug Fix</h3>
             <ul>
                 <li>Add: META-INF to distribution zip</li>

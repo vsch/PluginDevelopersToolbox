@@ -37,7 +37,9 @@ object PluginNotifications {
     val NOTIFICATION_GROUP_ACTION_ERRORS = NotificationGroup("PluginDevelopersToolbox File Action with errors", NotificationDisplayType.STICKY_BALLOON, true, null)
     val NOTIFICATION_GROUP_DEFAULT = NOTIFICATION_GROUP_ACTION
 
-    val DEFAULT_ALT_ATTR = "BUY"
+    val DEFAULT_STAR_ATTR = "BUY"
+    val DEFAULT_PLUS_ATTR = "ENHANCED"
+    val DEFAULT_ALT_PLUS_ATTR = "SPECIALS"
 
     fun applyHtmlColors(htmlText: String): String {
         val isDarkUITheme = UIUtil.isUnderDarcula()
@@ -47,7 +49,7 @@ object PluginNotifications {
         return htmlText.replace("[[ENHANCED]]", enhColor).replace("[[BUY]]", buyColor).replace("[[SPECIALS]]", specialsColor)
     }
 
-    fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = DEFAULT_ALT_ATTR): String {
+    fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = DEFAULT_STAR_ATTR): String {
         val features = processDashStarPage(processDashStarItems(featureList,enhAttr),titleHtml)
         return applyHtmlColors(features)
     }
@@ -60,7 +62,7 @@ object PluginNotifications {
         return applyHtmlColors(features)
     }
 
-    fun processDashStarItems(featureList: String, enhAttr: String = DEFAULT_ALT_ATTR): String {
+    fun processDashStarItems(featureList: String, starAttr: String = DEFAULT_STAR_ATTR, plusAttr: String = DEFAULT_PLUS_ATTR): String {
         //        val featureList = """
         //- Preferences now under <b>Languages & Frameworks</b>
         //- Improved preview update performance
@@ -80,9 +82,10 @@ object PluginNotifications {
         val features = featureList.split('\n').fold("") { accum, elem ->
             val item = elem.trim()
             accum + (
-                    if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<span style=\"color: [[$enhAttr]]\">", "</span>")
-                    else item.removePrefix("-").trim()
-                    ).wrapWith("<li>", "</li>")
+                    if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<li style=\"color: [[$starAttr]]\"><b>", "</b></li>")
+                    else if (item.startsWith('+')) item.removePrefix("+").trim().wrapWith("<li style=\"color: [[$plusAttr]]\"><b>", "</b></li>")
+                    else item.removePrefix("-").trim().wrapWith("<li>", "</li>")
+                    )
         }
 
         return features

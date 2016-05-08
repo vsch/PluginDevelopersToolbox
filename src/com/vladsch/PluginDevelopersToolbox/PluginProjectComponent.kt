@@ -31,12 +31,8 @@ import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.vfs.*
-import com.intellij.psi.PsiManager
-import com.intellij.psi.search.FilenameIndex
 import com.intellij.util.Alarm
-import org.apache.log4j.Logger
 import org.jetbrains.annotations.NonNls
 import java.io.IOException
 import java.util.regex.Pattern
@@ -248,12 +244,32 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         if (newFile != null && newFile.exists()) {
             try {
                 // copy contents
-                newFile.setBinaryContent(file.contentsToByteArray())
+                val oldContents = file.contentsToByteArray()
+                val newContents = newFile.contentsToByteArray()
+                var skipped = oldContents.size == newContents.size
+
+                if (skipped) {
+                    for (i in 0..oldContents.size - 1) {
+                        if (oldContents[i] != newContents[i]) {
+                            skipped = false
+                            break
+                        }
+                    }
+                }
+
+                if (!skipped) {
+                    newFile.setBinaryContent(file.contentsToByteArray())
+                }
 
                 try {
                     file.delete(this)
                     fileProcessed = true
-                    addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
+                    if (skipped) {
+                        // TODO: add configurable to enable suppressing this
+                        addNotificationItem(Bundle.message("plugin.action.file-skipped", newName), parentItem)
+                    } else {
+                        addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
+                    }
                 } catch (e: IOException) {
                     addNotificationItem(Bundle.message("plugin.action.file-delete-failed", file.name, newName), parentItem)
                 }

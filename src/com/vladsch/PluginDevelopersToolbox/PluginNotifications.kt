@@ -39,7 +39,7 @@ object PluginNotifications {
 
     val DEFAULT_STAR_ATTR = "BUY"
     val DEFAULT_PLUS_ATTR = "ENHANCED"
-    val DEFAULT_ALT_PLUS_ATTR = "SPECIALS"
+    val DEFAULT_TILDE_ATTR = "SPECIALS"
 
     fun applyHtmlColors(htmlText: String): String {
         val isDarkUITheme = UIUtil.isUnderDarcula()
@@ -50,19 +50,21 @@ object PluginNotifications {
     }
 
     fun processDashStarList(featureList: String, titleHtml: String? = null, enhAttr: String = DEFAULT_STAR_ATTR): String {
-        val features = processDashStarPage(processDashStarItems(featureList,enhAttr),titleHtml)
+        val features = processDashStarPage(processDashStarItems(featureList,enhAttr), titleHtml, null)
         return applyHtmlColors(features)
     }
 
-    fun processDashStarPage(featuresListHtml: String, titleHtml: String? = null): String {
+    fun processDashStarPage(featuresListHtml: String, titleHtml: String? = null, subTitleHtml: String?): String {
+        val subTitle = subTitleHtml ?: ""
         val features = featuresListHtml.wrapWith((if (titleHtml != null && !titleHtml.isEmpty()) """
 <h4 style="margin: 0; font-size: ${JBUI.scale(10)}px">$titleHtml</h4>""" else "")+"""
+<div style="margin-top: 0; margin-left: ${JBUI.scale(10)}px; margin-bottom: 0; font-size: ${JBUI.scale(9)}px">$subTitle</div>
 <ul style="margin-left: ${JBUI.scale(10)}px;">
 """, "</ul>")
         return applyHtmlColors(features)
     }
 
-    fun processDashStarItems(featureList: String, starAttr: String = DEFAULT_STAR_ATTR, plusAttr: String = DEFAULT_PLUS_ATTR): String {
+    fun processDashStarItems(featureList: String, starAttr: String = DEFAULT_STAR_ATTR, plusAttr: String = DEFAULT_PLUS_ATTR, tildeAttr: String = DEFAULT_TILDE_ATTR): String {
         //        val featureList = """
         //- Preferences now under <b>Languages & Frameworks</b>
         //- Improved preview update performance
@@ -84,6 +86,7 @@ object PluginNotifications {
             accum + (
                     if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<li style=\"color: [[$starAttr]]\"><b>", "</b></li>")
                     else if (item.startsWith('+')) item.removePrefix("+").trim().wrapWith("<li style=\"color: [[$plusAttr]]\"><b>", "</b></li>")
+                    else if (item.startsWith('~')) item.removePrefix("~").trim().wrapWith("<li style=\"color: [[$tildeAttr]]\"><b>", "</b></li>")
                     else item.removePrefix("-").trim().wrapWith("<li>", "</li>")
                     )
         }

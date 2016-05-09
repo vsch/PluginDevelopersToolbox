@@ -1,3 +1,9 @@
+### 1.0.6 - Minor Tweaks & Bug Fix
+
+- Add: different color to newly created files
+- Fix: slicy files in newly created directories would be ignored unless the directory name was
+  used as a splice to the file name.
+
 ### 1.0.5 - Bug Fix
 
 - Add: skipping of files whose content has not changed to prevent unnecessary VCS caused thrashing.

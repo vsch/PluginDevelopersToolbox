@@ -93,7 +93,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             myHadErrors = false
         }
 
-        val messageHtml = PluginNotifications.processDashStarPage(message, Bundle.message("plugin.action.files-moved.title"))
+        val messageHtml = PluginNotifications.processDashStarPage(message, Bundle.message("plugin.action.files-moved.title"), Bundle.message("plugin.action.files-moved.subtitle"))
         //        println(messageHtml)
         val notificationType = if (hadErrors) NotificationType.WARNING else NotificationType.INFORMATION
         val notificationGroup = if (hadErrors) PluginNotifications.NOTIFICATION_GROUP_ACTION_ERRORS else PluginNotifications.NOTIFICATION_GROUP_ACTION
@@ -101,9 +101,18 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         PluginNotifications.makeNotification(messageHtml, project = this.myProject, notificationType = notificationType, issueNotificationGroup = notificationGroup)
     }
 
-    private fun openParentItem(parentItem: String?) {
+    private fun openParentItem(parentItem: String) {
+        @Suppress("NAME_SHADOWING")
+        var parentItem = parentItem
         myNotifyMessage.append(PluginNotifications.processDashStarItems(myNotifyList.toString()))
-        myNotifyMessage.appendln("\n<li>$parentItem\n<ul style=\"margin-top: 0px;\">")
+        val colorOption: String =
+                if (parentItem.startsWith("~")) {
+                    parentItem = parentItem.removePrefix("~").wrapWith("<b>", "</b>")
+                    " style=\"color: [[SPECIALS]];\""
+                } else {
+                    ""
+                }
+        myNotifyMessage.appendln(PluginNotifications.applyHtmlColors("\n<li$colorOption>$parentItem\n<ul style=\"margin-top: 0px;\">"))
         myNotifyList.delete(0, myNotifyList.length)
         myLastParentItem = parentItem
     }
@@ -176,11 +185,17 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             }
         } else if (file.isDirectory) {
             // see if there are any child directories matching the Slicy directory splicing pattern
+            // or files in this directory that can be processed
             invokeLaterInWriteAction() {
                 if (file.isValid && parent.isValid) {
                     for (subDir in file.children) {
-                        if (subDir.isValid && subDir.isDirectory && subDir.extension == "+") {
-                            processSlicyDirectory(subDir, file, parent.name + "/" + file.name + "/")
+                        if (subDir.isValid && subDir.isDirectory) {
+                            if (subDir.extension == "+") {
+                                processSlicyDirectory(subDir, file, parent.name + "/" + file.name + "/")
+                            }
+                        } else if (subDir.isValid && !subDir.isDirectory && subDir.extension in IMAGE_EXTENSIONS) {
+                            // just process the directory
+                            processSlicyFile(subDir, file, "~" + parent.name + "/" + file.name + "/")
                         }
                     }
                 }
@@ -283,7 +298,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 try {
                     if (file.parent !== parent) file.move(this, parent)
                     fileProcessed = true
-                    addNotificationItem(Bundle.message("plugin.action.file-processed", newName), parentItem)
+                    addNotificationItem(Bundle.message("plugin.action.file-moved", newName), parentItem)
                 } catch (e: IOException) {
                     addNotificationItem(Bundle.message("plugin.action.file-move-failed", file.name, file.parent.name, parent.name), parentItem)
                     logger.info(e)

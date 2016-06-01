@@ -22,7 +22,7 @@
 <idea-plugin version="2" url="http://github.com/vsch/PluginDevelopersToolbox" xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
 
     <description><![CDATA[
@@ -42,7 +42,54 @@
         ]]>
     </description>
 
-    <xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
+    <change-notes><![CDATA[
+        <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.0.7 - Minor Tweaks &amp; Bug Fix</h3>
+            <ul>
+                <li>Fix: slicy files in newly created directories that ended in <code>_dark@2x</code> but did not equal this   string would not be properly processed.</li>
+            </ul>
+            <h3>1.0.6 - Minor Tweaks &amp; Bug Fix</h3>
+            <ul>
+                <li>Add: different color to newly created files</li>
+                <li>Fix: slicy files in newly created directories would be ignored unless the directory name was   used as a splice to the file name.</li>
+            </ul>
+            <h3>1.0.5 - Bug Fix</h3>
+            <ul>
+                <li>Add: skipping of files whose content has not changed to prevent unnecessary VCS caused thrashing.</li>
+            </ul>
+            <h3>1.0.4 - Bug Fix</h3>
+            <ul>
+                <li>Add: META-INF to distribution zip</li>
+                <li>Fix: #3, When a file in a subdirectory is first created by Slicy plugin gives an erroneous warning that file move failed</li>
+                <li>Fix: #4, Need to have sticky balloon notifications if they contain errors</li>
+                <li>Change: update Kotlin runtime to 1.0.0-release-IJ143-70</li>
+                <li>Change: only files located under the project base directory will be processed, otherwise multiple open projects would attempt to process the same files. Now only the project that contains the files under its base directory will process the files.</li>
+            </ul>
+            <h3>1.0.3 - Min Java Version Fix &amp; Kotlin Runtime</h3>
+            <ul>
+                <li>Add: plugin version number to notification title</li>
+                <li>Fix: min java version 1.6</li>
+                <li>Add: Kotlin run-time jars to distribution</li>
+            </ul>
+            <h3>1.0.2 - Bug Fix</h3>
+            <ul>
+                <li>Fix: #2, Change delete/rename and delete/copy operations used to process slicy files into copy contents then delete slicy generated file. Otherwise the files can become un-tracked under VCS because they were deleted.</li>
+            </ul>
+            <h3>1.0.1 - Bug Fix and Notification Cleanup</h3>
+            <ul>
+                <li>Fix: #1, Handling of one level directory nesting of Slicy generated directories.</li>
+                <li>Change: Cleaned up notification of nested files to be useful and cleaner, initial one looked more like a debug trace than a notification</li>
+                <li>Add: Screenshot to plugin information and readme files</li>
+            </ul>
+            <h3>1.0.0 - Initial Release</h3>
+            <ul>
+                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>
+                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see  <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
+            </ul>
+
+        </div>
+        ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="141.0"/>

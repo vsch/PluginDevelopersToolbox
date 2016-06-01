@@ -48,5 +48,5 @@ function UpdZip() {
 
 #UpdProduct "IdeaIC16" "IntelliJIdea16" "IdeaIC15" "IntelliJIdea15" "WebIde100" "WebIde110"
 #UpdJar CodeGlance "IdeaIC16" "IntelliJIdea16" "IdeaIC15" "IntelliJIdea15" "RubyMine80" "PyCharm40" "PyCharm50" "Webide100" "Webide110"
-UpdZip PluginDevelopersToolbox "IdeaIC16" "IntelliJIdea16" "IdeaIC15" "IntelliJIdea15" "RubyMine80" "PyCharm40" "PyCharm50" "Webide100" "Webide110"
+UpdZip PluginDevelopersToolbox "IdeaIC16" "IntelliJIdea16" "IdeaIC2016.1" "IdeaIC2016.2" "IdeaIC2016-2" "IntelliJIdea2016.1" "IntelliJIdea2016.2" "IdeaIC15" "IntelliJIdea15" "WebIde100" "WebIde110" "PhpStorm2016.1"
 

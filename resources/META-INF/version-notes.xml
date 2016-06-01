@@ -2,6 +2,10 @@
 <idea-plugin version="2">
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.0.7 - Minor Tweaks &amp; Bug Fix</h3>
+            <ul>
+                <li>Fix: slicy files in newly created directories that ended in <code>_dark@2x</code> but did not equal this   string would not be properly processed.</li>
+            </ul>
             <h3>1.0.6 - Minor Tweaks &amp; Bug Fix</h3>
             <ul>
                 <li>Add: different color to newly created files</li>
@@ -40,6 +44,7 @@
                 <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>
                 <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see  <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
             </ul>
+
         </div>
         ]]></change-notes>
 

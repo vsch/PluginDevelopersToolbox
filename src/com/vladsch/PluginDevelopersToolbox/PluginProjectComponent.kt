@@ -228,7 +228,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
                 // our candidate
                 var removedPrefix = file.nameWithoutExtension.removePrefix("+")
-                if (removedPrefix == "_dark@2x") removedPrefix = "@2x_dark"
+                removedPrefix = removedPrefix.replace("_dark@2x","@2x_dark")
                 val newName = namePrefix + removedPrefix + '.' + file.extension
                 if (!processFile(file, newName, parent, parentItem)) {
                     allProcessed = false

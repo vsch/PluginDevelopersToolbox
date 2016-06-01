@@ -41,7 +41,7 @@ cp -R ../lib ./PluginDevelopersToolbox
 #rm ./PluginDevelopersToolbox/lib/*source*.jar
 cp PluginDevelopersToolbox.jar ./PluginDevelopersToolbox/lib/PluginDevelopersToolbox.jar
 #cp PluginDevelopersToolbox-javafx.jar ./PluginDevelopersToolbox/lib/PluginDevelopersToolbox-javafx.jar
-cp -R PluginDevelopersToolbox-raw/META-INF ./PluginDevelopersToolbox
+#cp -R PluginDevelopersToolbox-raw/META-INF ./PluginDevelopersToolbox
 
 # delete kotlin-runtime-sources.jar
 if [ -f "./PluginDevelopersToolbox/lib/kotlin-runtime-sources.jar" ]; then
@@ -106,7 +106,9 @@ function Upd() {
 }
 
 #Upd "IdeaIC15" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
-Upd "IdeaIC16" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
+#Upd "IdeaIC16" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
 #Upd "IntelliJIdea15" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
-Upd "IntelliJIdea16" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
+#Upd "IntelliJIdea16" "plugins-sandbox-14ce" "plugins-sandbox-15ce" "plugins-sandbox-16ce" "plugins-sandbox-15eap" "plugins-sandbox-16eap"
 
+Upd "IdeaIC2016.1" "plugins-sandbox-mn" "plugins-sandbox-php" "plugins-sandbox-16ce"
+Upd "IdeaIC2016-2" "plugins-sandbox-mn" "plugins-sandbox-php" "plugins-sandbox-16ce"

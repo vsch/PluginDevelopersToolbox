@@ -1,3 +1,8 @@
+### 1.0.7 - Minor Tweaks & Bug Fix
+
+- Fix: slicy files in newly created directories that ended in `_dark@2x` but did not equal this
+  string would not be properly processed.
+
 ### 1.0.6 - Minor Tweaks & Bug Fix
 
 - Add: different color to newly created files

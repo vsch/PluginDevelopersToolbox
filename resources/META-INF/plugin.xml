@@ -22,25 +22,26 @@
 <idea-plugin version="2" url="http://github.com/vsch/PluginDevelopersToolbox" xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
-    <version>1.0.7</version>
     <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
 
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <img src="https://raw.githubusercontent.com/vsch/PluginDevelopersToolbox/master/assets/images/ScreenShot_sequence_1x.png"
-                 border="0" width="414" height="155"
-                 alt="Screenshot">
+            <p><img
+                  src="https://raw.githubusercontent.com/vsch/PluginDevelopersToolbox/master/assets/images/ScreenShot_sequence_1x.png"
+                  border="0" width="414" height="155" alt="Screenshot"></p>
             <p>For now only one very useful function: <a href="http://www.macrabbit.com/slicy">Slicy</a> file
                 mover/renamer.</p>
-            <p><strong>Plugin website: <a href="http://github.com/vsch/PluginDevelopersToolbox"><span
-                    style="color:#30A0D8">Plugin Developer's Toolbox GitHub Repo</span></a></strong></p>
-            <p><strong>Bug tracking & feature requests: <a
-                    href="https://github.com/vsch/PluginDevelopersToolbox/issues"><span style="color:#30A0D8">Plugin Developer's Toolbox GitHub Issues</span></a></strong>
-            </p>
-            <!--<p><strong>Documentation: <a href="https://github.com/vsch/idea-multimarkdown/wiki"><span style="color:#30A0D8">MultiMarkdown GitHub Wiki page.</span></a></strong>--></p>
+            <p><strong>Plugin website:
+                <a href="http://github.com/vsch/PluginDevelopersToolbox">Plugin Developer&rsquo;s Toolbox GitHub Repo</a></strong></p>
+            <p><strong>Bug tracking &amp; feature requests:
+                <a href="https://github.com/vsch/PluginDevelopersToolbox/issues">Plugin Developer&rsquo;s Toolbox GitHub Issues</a></strong></p>
         </div>
         ]]>
     </description>
+
+    <version>1.0.7</version>
+    <idea-version since-build="141.0"/>
+    <depends>com.intellij.modules.lang</depends>
 
     <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
@@ -90,13 +91,6 @@
 
         </div>
         ]]></change-notes>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="141.0"/>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.lang</depends>
 
     <project-components>
         <!-- Plugin's project components -->

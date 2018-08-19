@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-HOME_DIR="/Users/vlad/src/PluginDevelopersToolbox"
+HOME_DIR="/Users/vlad/src/projects/PluginDevelopersToolbox"
+PLUGIN="PluginDevelopersToolbox"
 
 cd ${HOME_DIR}
 
@@ -8,9 +9,9 @@ function UpdProduct() {
     for PRODUCT in "$@"
     do
         if [ -d /Users/vlad/Library/"Application Support"/${PRODUCT} ]; then
-            echo updating ${PRODUCT} for latest idea-multimarkdown
-            rm -fr /Users/vlad/Library/"Application Support"/${PRODUCT}/idea-multimarkdown
-            unzip -bq ../idea-multimarkdown.zip -d /Users/vlad/Library/"Application Support"/${PRODUCT}
+            echo updating ${PRODUCT} for latest ${PLUGIN}
+            rm -fr /Users/vlad/Library/"Application Support"/${PRODUCT}/${PLUGIN}
+            unzip -bq ${PLUGIN}.zip -d /Users/vlad/Library/"Application Support"/${PRODUCT}
         else
             echo product ${PRODUCT} does not exist in /Users/vlad/Library/"Application Support"/
         fi
@@ -19,7 +20,7 @@ function UpdProduct() {
 
 function UpdJar() {
     ZIP=$1
-    for PRODUCT in ${2:+"$@"}
+    for PRODUCT in ${@:2}
     do
         if [ -d /Users/vlad/Library/"Application Support"/${PRODUCT} ]; then
             echo updating ${PRODUCT} jar for ${ZIP}
@@ -34,7 +35,7 @@ function UpdJar() {
 
 function UpdZip() {
     ZIP=$1
-    for PRODUCT in ${2:+"$@"}
+    for PRODUCT in ${@:2}
     do
         if [ -d /Users/vlad/Library/"Application Support"/${PRODUCT} ]; then
             echo updating ${PRODUCT} zip for ${ZIP}
@@ -48,5 +49,5 @@ function UpdZip() {
 
 #UpdProduct "IdeaIC16" "IntelliJIdea16" "IdeaIC15" "IntelliJIdea15" "WebIde100" "WebIde110"
 #UpdJar CodeGlance "IdeaIC16" "IntelliJIdea16" "IdeaIC15" "IntelliJIdea15" "RubyMine80" "PyCharm40" "PyCharm50" "Webide100" "Webide110"
-UpdZip PluginDevelopersToolbox "IdeaIC16" "IntelliJIdea16" "IdeaIC2016.1" "IdeaIC2016.2" "IdeaIC2016-2" "IntelliJIdea2016.1" "IntelliJIdea2016.2" "IdeaIC15" "IntelliJIdea15" "WebIde100" "WebIde110" "PhpStorm2016.1"
+UpdZip PluginDevelopersToolbox "IdeaIC2018-1-EAP" "IdeaIC2018-2-EAP" "IdeaIC2017.3" "IdeaIC2018.1" "IdeaIC2018.2" "IntelliJIdea2018.1" "IntelliJIdea2018.2" "PhpStorm2018.1" "PhpStorm2018.2" "WebStorm2018.1" "WebStorm2018.2" "CLion2018.1" "CLion2018.2"
 

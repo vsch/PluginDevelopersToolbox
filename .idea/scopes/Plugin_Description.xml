@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Plugin Description" pattern="file:assets/markdown/plugin-description.md||file:assets/markdown/plugin-description.html" />
+</component>

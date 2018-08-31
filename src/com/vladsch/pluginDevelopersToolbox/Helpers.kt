@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.PluginDevelopersToolbox
+package com.vladsch.pluginDevelopersToolbox
 
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder

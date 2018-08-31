@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.PluginDevelopersToolbox
+package com.vladsch.pluginDevelopersToolbox
 
 import com.intellij.ide.BrowserUtil
 import com.intellij.notification.NotificationDisplayType
@@ -32,9 +32,9 @@ import com.intellij.xml.util.XmlStringUtil
 
 object PluginNotifications {
 
-    val NOTIFICATION_GROUP_UPDATE = NotificationGroup("PluginDevelopersToolbox Update", NotificationDisplayType.STICKY_BALLOON, true, null)
-    val NOTIFICATION_GROUP_ACTION = NotificationGroup("PluginDevelopersToolbox File Action", NotificationDisplayType.STICKY_BALLOON, true, null)
-    val NOTIFICATION_GROUP_ACTION_ERRORS = NotificationGroup("PluginDevelopersToolbox File Action with errors", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_UPDATE = NotificationGroup("pluginDevelopersToolbox Update", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_ACTION = NotificationGroup("pluginDevelopersToolbox File Action", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_ACTION_ERRORS = NotificationGroup("pluginDevelopersToolbox File Action with errors", NotificationDisplayType.STICKY_BALLOON, true, null)
     val NOTIFICATION_GROUP_DEFAULT = NOTIFICATION_GROUP_ACTION
 
     val DEFAULT_STAR_ATTR = "BUY"

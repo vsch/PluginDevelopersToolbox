@@ -99,10 +99,10 @@
     <project-components>
         <!-- Plugin's project components -->
         <component>
-            <implementation-class>com.vladsch.PluginDevelopersToolbox.PluginProjectComponent</implementation-class>
+            <implementation-class>com.vladsch.pluginDevelopersToolbox.PluginProjectComponent</implementation-class>
         </component>
         <component>
-            <implementation-class>com.vladsch.PluginDevelopersToolbox.PluginDevelopersToolboxSettings</implementation-class>
+            <implementation-class>com.vladsch.pluginDevelopersToolbox.PluginDevelopersToolboxSettings</implementation-class>
             <loadForDefaultProject/>
         </component>
     </project-components>
@@ -111,10 +111,10 @@
         <!-- Add your extensions here -->
         <projectConfigurable id="PluginDevelopersToolbox.Settings.Project"
                              groupId="tools"
-                             bundle="com.vladsch.PluginDevelopersToolbox.localization.strings"
+                             bundle="com.vladsch.pluginDevelopersToolbox.localization.strings"
                              key="settings.project.name"
                              nonDefaultProject="false"
-                             instance="com.vladsch.PluginDevelopersToolbox.ProjectConfigurable"/>
+                             instance="com.vladsch.pluginDevelopersToolbox.ProjectConfigurable"/>
     </extensions>
 
     <actions>

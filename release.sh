@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-HOME_DIR="/Users/vlad/src/projects/PluginDevelopersToolbox"
+HOME_DIR="/Users/vlad/src/projects/pluginDevelopersToolbox"
 
 cd ${HOME_DIR}/libprep
 
 # copy production to local for jarring
-if [ -d "PluginDevelopersToolbox-raw" ]; then
+if [ -d "pluginDevelopersToolbox-raw" ]; then
     echo deleting PluginDevelopersToolbox-raw
     rm -fr ./PluginDevelopersToolbox-raw
 fi
@@ -12,13 +12,13 @@ fi
 cp -R ../out/production/PluginDevelopersToolbox ./PluginDevelopersToolbox-raw
 
 # create javafx classes and move them from the main jar dir
-if [ -d "PluginDevelopersToolbox-javafx" ]; then
+if [ -d "pluginDevelopersToolbox-javafx" ]; then
     echo deleting PluginDevelopersToolbox-javafx
     rm -fr ./PluginDevelopersToolbox-javafx
 fi
 
 # create the main jar without the javafx dependent files
-if [ -f "PluginDevelopersToolbox.jar" ]; then
+if [ -f "pluginDevelopersToolbox.jar" ]; then
     echo deleting PluginDevelopersToolbox.jar
     rm -fr ./PluginDevelopersToolbox.jar
 fi
@@ -32,25 +32,25 @@ zip -rq ../PluginDevelopersToolbox.jar \
 cd ..
 
 # create distribution directory then zip it
-if [ -d "PluginDevelopersToolbox" ]; then
+if [ -d "pluginDevelopersToolbox" ]; then
     echo deleting PluginDevelopersToolbox
     rm -fr ./PluginDevelopersToolbox
 fi
 mkdir -p ./PluginDevelopersToolbox
 cp -R ../lib ./PluginDevelopersToolbox
-#rm ./PluginDevelopersToolbox/lib/*source*.jar
+#rm ./pluginDevelopersToolbox/lib/*source*.jar
 cp PluginDevelopersToolbox.jar ./PluginDevelopersToolbox/lib/PluginDevelopersToolbox.jar
-#cp PluginDevelopersToolbox-javafx.jar ./PluginDevelopersToolbox/lib/PluginDevelopersToolbox-javafx.jar
-#cp -R PluginDevelopersToolbox-raw/META-INF ./PluginDevelopersToolbox
+#cp pluginDevelopersToolbox-javafx.jar ./pluginDevelopersToolbox/lib/pluginDevelopersToolbox-javafx.jar
+#cp -R pluginDevelopersToolbox-raw/META-INF ./pluginDevelopersToolbox
 
 # delete kotlin-runtime-sources.jar
-if [ -f "./PluginDevelopersToolbox/lib/kotlin-runtime-sources.jar" ]; then
+if [ -f "./pluginDevelopersToolbox/lib/kotlin-runtime-sources.jar" ]; then
     echo deleting ./PluginDevelopersToolbox/lib/kotlin-runtime-sources.jar
     rm -f ./PluginDevelopersToolbox/lib/kotlin-runtime-sources.jar
 fi
 
 # create the distribution zip
-if [ -f "PluginDevelopersToolbox.zip" ]; then
+if [ -f "pluginDevelopersToolbox.zip" ]; then
     echo deleting PluginDevelopersToolbox.zip
     rm -fr ./PluginDevelopersToolbox.zip
 fi
@@ -61,20 +61,20 @@ PluginDevelopersToolbox/META-INF
 # copy zip to main directory
 cp ./PluginDevelopersToolbox.zip ../PluginDevelopersToolbox.zip
 
-if [ -d "PluginDevelopersToolbox-zip" ]; then
+if [ -d "pluginDevelopersToolbox-zip" ]; then
     echo deleting PluginDevelopersToolbox-zip
     rm -fr ./PluginDevelopersToolbox-zip
 fi
 unzip -bq ./PluginDevelopersToolbox.zip -d ./PluginDevelopersToolbox-zip
 
 # unzip jars from distribution directory
-#if [ -d "PluginDevelopersToolbox-javafx-jar" ]; then
-#    echo deleting PluginDevelopersToolbox-javafx-jar
-#    rm -fr ./PluginDevelopersToolbox-javafx-jar
+#if [ -d "pluginDevelopersToolbox-javafx-jar" ]; then
+#    echo deleting pluginDevelopersToolbox-javafx-jar
+#    rm -fr ./pluginDevelopersToolbox-javafx-jar
 #fi
-#unzip -bq ./PluginDevelopersToolbox-zip/PluginDevelopersToolbox/lib/PluginDevelopersToolbox-javafx.jar -d ./PluginDevelopersToolbox-javafx-jar
+#unzip -bq ./pluginDevelopersToolbox-zip/pluginDevelopersToolbox/lib/pluginDevelopersToolbox-javafx.jar -d ./pluginDevelopersToolbox-javafx-jar
 
-if [ -d "PluginDevelopersToolbox-jar" ]; then
+if [ -d "pluginDevelopersToolbox-jar" ]; then
     echo deleting PluginDevelopersToolbox-jar
     rm -fr ./PluginDevelopersToolbox-jar
 fi

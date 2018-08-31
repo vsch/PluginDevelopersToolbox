@@ -12,7 +12,7 @@
  * under the License.
  *
  */
-package com.vladsch.PluginDevelopersToolbox;
+package com.vladsch.pluginDevelopersToolbox;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;

@@ -12,7 +12,7 @@
  * under the License.
  *
  */
-package com.vladsch.PluginDevelopersToolbox;
+package com.vladsch.pluginDevelopersToolbox;
 
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
         storages = {
                 @Storage(file = "plugin-developers-toolbox.xml", scheme = StorageScheme.DIRECTORY_BASED)
         })
-public class PluginDevelopersToolboxSettings extends AbstractProjectComponent implements PersistentStateComponent<PluginDevelopersToolboxSettings> {
+public class PluginDevelopersToolboxSettings implements ProjectComponent, PersistentStateComponent<PluginDevelopersToolboxSettings> {
     //final private Project myProject;
     private boolean myEnabled;
 
@@ -42,11 +42,11 @@ public class PluginDevelopersToolboxSettings extends AbstractProjectComponent im
     }
 
     public PluginDevelopersToolboxSettings(@NotNull Project project) {
-        super(project);
+
     }
 
     public PluginDevelopersToolboxSettings() {
-        super(null);
+
     }
 
     @Nullable

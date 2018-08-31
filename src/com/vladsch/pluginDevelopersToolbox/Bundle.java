@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.PluginDevelopersToolbox;
+package com.vladsch.pluginDevelopersToolbox;
 
 import com.intellij.CommonBundle;
 import org.jetbrains.annotations.NonNls;
@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 public class Bundle {
 
     @NonNls
-    private static final String BUNDLE_NAME = "com.vladsch.PluginDevelopersToolbox.localization.strings";
+    private static final String BUNDLE_NAME = "com.vladsch.pluginDevelopersToolbox.localization.strings";
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 

@@ -12,7 +12,7 @@
  * under the License.
  *
  */
-package com.vladsch.PluginDevelopersToolbox;
+package com.vladsch.pluginDevelopersToolbox;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;

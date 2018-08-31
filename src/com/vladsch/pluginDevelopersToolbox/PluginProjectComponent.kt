@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package com.vladsch.PluginDevelopersToolbox
+package com.vladsch.pluginDevelopersToolbox
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManager
@@ -30,6 +30,7 @@ import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.ProjectComponent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.*
 import com.intellij.util.Alarm
@@ -38,7 +39,7 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 class PluginProjectComponent(val myProject: Project) : ProjectComponent, VirtualFileListener, Disposable, Runnable {
-    private val logger = com.intellij.openapi.diagnostic.Logger.getInstance("com.vladsch.PluginDevelopersToolbox")
+    private val logger = Logger.getInstance("com.vladsch.pluginDevelopersToolbox")
 
     private val mySwingAlarm = Alarm(Alarm.ThreadToUse.SWING_THREAD, this)
     private val REQUESTS_LOCK = Object()
@@ -74,7 +75,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     override fun run() {
-        var message: String = ""
+        var message = ""
         var hadErrors = false
         synchronized (REQUESTS_LOCK) {
             myLastRequest = null
@@ -87,7 +88,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             myNotifyList.delete(0, myNotifyList.length)
 
             hadErrors = myHadErrors
-            message = myNotifyMessage.toString();
+            message = myNotifyMessage.toString()
             //            println(message)
             myNotifyMessage.delete(0, myNotifyMessage.length)
             myHadErrors = false
@@ -159,7 +160,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     fun invokeLaterInWriteAction(runnable: () -> Unit) {
-        ApplicationManager.getApplication().invokeLater() {
+        ApplicationManager.getApplication().invokeLater {
             WriteCommandAction.runWriteCommandAction(myProject, runnable)
         }
     }
@@ -170,7 +171,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         if (!event.isFromRefresh || !file.isValid || myProject.basePath == null || !parent.path.startsWith(myProject.basePath!!.suffixWith('/'))) return // not in our project
 
         if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
-            invokeLaterInWriteAction() {
+            invokeLaterInWriteAction {
                 if (file.isValid && parent.isValid) {
                     processSlicyFile(file, parent, parent.name + "/")
                 }
@@ -178,7 +179,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         } else if (file.isDirectory && file.extension == "+") {
             // take the directory name  (less extension) add file name by stripping the leading - in file name and put it into the parent
             // directory while deleting this directory
-            invokeLaterInWriteAction() {
+            invokeLaterInWriteAction {
                 if (file.isValid && parent.isValid) {
                     processSlicyDirectory(file, parent, parent.name + "/")
                 }
@@ -186,7 +187,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         } else if (file.isDirectory) {
             // see if there are any child directories matching the Slicy directory splicing pattern
             // or files in this directory that can be processed
-            invokeLaterInWriteAction() {
+            invokeLaterInWriteAction {
                 if (file.isValid && parent.isValid) {
                     for (subDir in file.children) {
                         if (subDir.isValid && subDir.isDirectory) {
@@ -243,7 +244,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             } catch (e: IOException) {
                 addNotificationItem(Bundle.message("plugin.action.file-delete-failed", directory.name), parentItem)
                 allProcessed = false
-                logger.info(e);
+                logger.info(e)
             }
         }
 
@@ -342,7 +343,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     companion object {
         private val PLUGIN_ID = "com.vladsch.PluginDevelopersToolbox"
         @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        private val logger = com.intellij.openapi.diagnostic.Logger.getInstance("com.vladsch.slicy-mover")
+        private val logger = Logger.getInstance("com.vladsch.slicy-mover")
 
         @JvmStatic
         val productName: String
@@ -355,7 +356,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                     return plugin
                 }
             }
-            return null;
+            return null
         }
 
         @JvmStatic val pluginDescriptor: IdeaPluginDescriptor
@@ -377,13 +378,13 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 val version = pluginDescriptor.version
                 // truncate version to 3 digits and if had more than 3 append .x, that way
                 // no separate product versions need to be created
-                val parts = version.split(delimiters = '.', limit = 4)
+                val parts = version.split(delimiters = *charArrayOf('.'), limit = 4)
                 if (parts.size <= 3) {
                     return version
                 }
 
-                val newVersion = parts.subList(0, 3).reduce { total, next -> total + "." + next }
-                return newVersion + ".x"
+                val newVersion = parts.subList(0, 3).reduce { total, next -> "$total.$next" }
+                return "$newVersion.x"
             }
 
         @JvmStatic
@@ -391,7 +392,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             val variants = arrayOf(PathManager.getHomePath(), PathManager.getPluginsPath())
 
             for (variant in variants) {
-                val path = variant + "/" + productName
+                val path = "$variant/$productName"
                 if (LocalFileSystem.getInstance().findFileByPath(path) != null) {
                     return path
                 }

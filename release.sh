@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-HOME_DIR="/Users/vlad/src/PluginDevelopersToolbox"
+HOME_DIR="/Users/vlad/src/projects/PluginDevelopersToolbox"
 
 cd ${HOME_DIR}/libprep
 

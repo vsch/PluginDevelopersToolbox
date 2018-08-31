@@ -18,7 +18,6 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
-import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,10 +33,6 @@ public class ProjectConfigurable implements SearchableConfigurable {
         this.myProject = project;
         this.mySettings = PluginDevelopersToolboxSettings.getInstance(project);
     }
-
-
-
-
 
     @NotNull
     @Override
@@ -90,18 +85,17 @@ public class ProjectConfigurable implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !getForm().getSettings().equals(mySettings);
+        return !getForm().isModified(mySettings);
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        myProfileSynchronizer.setCssSettings(getForm().getSettings());
-        myProfileSynchronizer.apply();
+        getForm().apply(mySettings);
     }
 
     @Override
     public void reset() {
-        getForm().setCssSettings(getProfileForReset().getCssSettings());
+        getForm().reset(mySettings);
     }
 
     @Override
@@ -109,16 +103,6 @@ public class ProjectConfigurable implements SearchableConfigurable {
         if (myForm != null) {
             Disposer.dispose(myForm);
             myForm = null;
-            myProfileSynchronizer.reset();
-        }
-    }
-
-    protected MarkdownRenderingProfileHolder getProfileForReset() {
-        if (myFirstReset) {
-            myFirstReset = false;
-            return myProfileSynchronizer.getRenderingProfile();
-        } else {
-            return myProfileSynchronizer.getRenderingProfileHolder();
         }
     }
 }

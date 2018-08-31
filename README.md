@@ -7,6 +7,12 @@ idea-multimarkdown plugin.
 
 [Version Notes]
 
+## Version 1.1 Release
+
+:warning: The plugin now has a project setting to enable its operation under settings (Preferences) >
+Tools > Plugin Developer's Toolbox. It is disabled by default not to interfere with projects
+that do not need its functionality.
+
 ## Version 1.0 Initial Release
 
 For now it is just one extremely useful function if you use [Slicy] for extracting icon images
@@ -76,6 +82,6 @@ The plugin augments this in the following way:
             newIconName_dark.png
 
 [macrabbit]: http://www.macrabbit.com
-[Slicy]: http://www.macrabbit.com/slicy    
+[Slicy]: http://www.macrabbit.com/slicy
 [Version Notes]: /resources/META-INF/VERSION.md
 

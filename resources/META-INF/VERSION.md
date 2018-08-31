@@ -2,7 +2,7 @@
 
 [TOC]: # " "
 
-- [Next 1.1.0 - Add Project Settings](#next-110---add-project-settings)
+- [1.1.0 - Add Project Settings](#110---add-project-settings)
 - [1.0.7 - Minor Tweaks & Bug Fix](#107---minor-tweaks--bug-fix)
 - [1.0.6 - Minor Tweaks & Bug Fix](#106---minor-tweaks--bug-fix)
 - [1.0.5 - Bug Fix](#105---bug-fix)
@@ -13,10 +13,9 @@
 - [1.0.0 - Initial Release](#100---initial-release)
 
 
-### Next 1.1.0 - Add Project Settings
+### 1.1.0 - Add Project Settings
 
-- [ ] Add Project settings to enable plugin operation
-- [ ] Add Scope based file handling
+* Add Project settings to enable plugin operation. Disabled by default.
 
 ### 1.0.7 - Minor Tweaks & Bug Fix
 
@@ -71,5 +70,5 @@
   IntelliJ icon naming conventions. see [Readme]
 
 [Readme]: https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md
-[Slicy]: http://www.macrabbit.com/slicy    
+[Slicy]: http://www.macrabbit.com/slicy
 

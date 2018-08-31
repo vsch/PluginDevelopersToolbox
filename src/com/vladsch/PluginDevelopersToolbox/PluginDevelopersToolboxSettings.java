@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
         storages = {
                 @Storage(file = "plugin-developers-toolbox.xml", scheme = StorageScheme.DIRECTORY_BASED)
         })
-public class PluginDevelopersToolboxSettings implements PersistentStateComponent<PluginDevelopersToolboxSettings> {
+public class PluginDevelopersToolboxSettings extends AbstractProjectComponent implements PersistentStateComponent<PluginDevelopersToolboxSettings> {
     //final private Project myProject;
     private boolean myEnabled;
 
@@ -42,7 +42,11 @@ public class PluginDevelopersToolboxSettings implements PersistentStateComponent
     }
 
     public PluginDevelopersToolboxSettings(@NotNull Project project) {
+        super(project);
+    }
 
+    public PluginDevelopersToolboxSettings() {
+        super(null);
     }
 
     @Nullable

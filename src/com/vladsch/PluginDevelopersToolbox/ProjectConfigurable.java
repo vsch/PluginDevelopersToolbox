@@ -85,7 +85,7 @@ public class ProjectConfigurable implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !getForm().isModified(mySettings);
+        return getForm().isModified(mySettings);
     }
 
     @Override

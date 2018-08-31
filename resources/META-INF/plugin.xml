@@ -19,7 +19,7 @@
   ~ under the License.
   -->
 
-<idea-plugin version="2" url="http://github.com/vsch/PluginDevelopersToolbox" xmlns:xi="http://www.w3.org/2001/XInclude">
+<idea-plugin url="http://github.com/vsch/PluginDevelopersToolbox">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
     <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
@@ -39,14 +39,14 @@
         ]]>
     </description>
 
-    <version>1.0.7</version>
+    <version>1.0.9</version>
     <idea-version since-build="141.0"/>
     <depends>com.intellij.modules.lang</depends>
 
     <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <h3>1.0.7 - Minor Tweaks &amp; Bug Fix</h3>
+            <h3>1.0.9 - Minor Tweaks &amp; Bug Fix</h3>
             <ul>
                 <li>Fix: slicy files in newly created directories that ended in <code>_dark@2x</code> but did not equal this   string would not be properly processed.</li>
             </ul>
@@ -96,11 +96,17 @@
         <!-- Plugin's project components -->
         <component>
             <implementation-class>com.vladsch.PluginDevelopersToolbox.PluginProjectComponent</implementation-class>
+            <implementation-class>com.vladsch.PluginDevelopersToolbox.PluginDevelopersToolboxSettings</implementation-class>
         </component>
     </project-components>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <projectConfigurable id="PluginDevelopersToolbox.Settings.Project"
+                             bundle="com.vladsch.PluginDevelopersToolbox.localization.strings"
+                             key="settings.project.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.PluginDevelopersToolbox.ProjectConfigurable"/>
     </extensions>
 
     <actions>

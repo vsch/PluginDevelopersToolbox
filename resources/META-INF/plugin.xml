@@ -39,7 +39,7 @@
         ]]>
     </description>
 
-    <version>1.1.0</version>
+    <version>1.1.2</version>
     <idea-version since-build="163.15529"/>
     <depends>com.intellij.modules.lang</depends>
 

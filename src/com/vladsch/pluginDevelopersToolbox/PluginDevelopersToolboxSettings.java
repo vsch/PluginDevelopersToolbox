@@ -49,6 +49,37 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
 
     }
 
+    @Override
+    public void noStateLoaded() {
+
+    }
+
+    @Override
+    public void projectOpened() {
+
+    }
+
+    @Override
+    public void projectClosed() {
+
+    }
+
+    @Override
+    public void initComponent() {
+
+    }
+
+    @Override
+    public void disposeComponent() {
+
+    }
+
+    @NotNull
+    @Override
+    public String getComponentName() {
+        return "PluginDevelopersToolboxSettings";
+    }
+
     @Nullable
     @Override
     public PluginDevelopersToolboxSettings getState() {

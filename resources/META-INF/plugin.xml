@@ -40,12 +40,17 @@
     </description>
 
     <version>1.1.0</version>
-    <idea-version since-build="141.0"/>
+    <idea-version since-build="163.15529"/>
     <depends>com.intellij.modules.lang</depends>
 
     <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.1.2 - Fix 2016.3 Compatibility</h3>
+            <ul>
+                <li>Fix: 2016.3 compatibility</li>
+                <li>Change: since build to 2016.3</li>
+            </ul>
             <h3>1.1.0 - Add Project Settings</h3>
             <ul>
                 <li>Add Project settings to enable plugin operation. Disabled by default.</li>

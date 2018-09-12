@@ -2,6 +2,7 @@
 
 [TOC]: # " "
 
+- [1.1.4 - Fix 2016.3 Compatibility](#114---fix-20163-compatibility)
 - [1.1.2 - Fix 2016.3 Compatibility](#112---fix-20163-compatibility)
 - [1.1.0 - Add Project Settings](#110---add-project-settings)
 - [1.0.7 - Minor Tweaks & Bug Fix](#107---minor-tweaks--bug-fix)
@@ -13,6 +14,10 @@
 - [1.0.1 - Bug Fix and Notification Cleanup](#101---bug-fix-and-notification-cleanup)
 - [1.0.0 - Initial Release](#100---initial-release)
 
+
+### 1.1.4 - Fix 2016.3 Compatibility
+
+* Fix: enable/disable setting was ignored
 
 ### 1.1.2 - Fix 2016.3 Compatibility
 

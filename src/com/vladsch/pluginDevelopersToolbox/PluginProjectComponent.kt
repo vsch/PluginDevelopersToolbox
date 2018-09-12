@@ -166,6 +166,8 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
     }
 
     override fun fileCreated(event: VirtualFileEvent) {
+        if (!PluginDevelopersToolboxSettings.getInstance(myProject).isEnabled) return
+
         val parent = event.parent ?: return
         val file = event.file
         if (!event.isFromRefresh || !file.isValid || myProject.basePath == null || !parent.path.startsWith(myProject.basePath!!.suffixWith('/'))) return // not in our project

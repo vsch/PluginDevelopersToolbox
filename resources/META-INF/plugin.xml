@@ -39,13 +39,17 @@
         ]]>
     </description>
 
-    <version>1.1.2</version>
+    <version>1.1.4</version>
     <idea-version since-build="163.15529"/>
     <depends>com.intellij.modules.lang</depends>
 
     <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.1.4 - Fix 2016.3 Compatibility</h3>
+            <ul>
+                <li>Fix: enable/disable setting was ignored</li>
+            </ul>
             <h3>1.1.2 - Fix 2016.3 Compatibility</h3>
             <ul>
                 <li>Fix: 2016.3 compatibility</li>

@@ -30,7 +30,7 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
 
     @NotNull
     public static PluginDevelopersToolboxSettings getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, PluginDevelopersToolboxSettings.class);
+        return project.getComponent(PluginDevelopersToolboxSettings.class);
     }
 
     public boolean isEnabled() {

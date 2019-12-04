@@ -2,6 +2,7 @@
 
 [TOC]: # " "
 
+- [1.2.0 - Feature Release](#120---feature-release)
 - [1.1.6 - Bug Fix](#116---bug-fix)
 - [1.1.4 - Fix 2016.3 Compatibility](#114---fix-20163-compatibility)
 - [1.1.2 - Fix 2016.3 Compatibility](#112---fix-20163-compatibility)
@@ -15,6 +16,13 @@
 - [1.0.1 - Bug Fix and Notification Cleanup](#101---bug-fix-and-notification-cleanup)
 - [1.0.0 - Initial Release](#100---initial-release)
 
+
+### 1.2.0 - Feature Release
+
+* Add: `Disable Editor Tab Title Expansion for plugin.xml files` to remove the plugin id from
+  editor tab of `plugin.xml` files.
+* Add: `Only when single plugin.xml is open` to allow expansion of title when more than one
+  `plugin.xml` file is open
 
 ### 1.1.6 - Bug Fix
 

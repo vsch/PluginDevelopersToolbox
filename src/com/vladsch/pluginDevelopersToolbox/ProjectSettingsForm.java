@@ -27,13 +27,15 @@ public class ProjectSettingsForm implements Disposable {
 
     private JPanel myMainPanel;
     private JBCheckBox myEnabled;
+    private JBCheckBox myDisablePluginXmlEditorTabNameExpansion;
+    private JBCheckBox myDisablePluginXmlIfSingleFile;
 
     public JComponent getComponent() {
         return myMainPanel;
     }
 
     public ProjectSettingsForm() {
-
+        myDisablePluginXmlEditorTabNameExpansion.addActionListener(e -> myDisablePluginXmlIfSingleFile.setEnabled(myDisablePluginXmlEditorTabNameExpansion.isSelected()));
     }
 
     private void createUIComponents() {
@@ -41,15 +43,21 @@ public class ProjectSettingsForm implements Disposable {
     }
 
     public boolean isModified(@NotNull PluginDevelopersToolboxSettings settings) {
-        return myEnabled.isSelected() != settings.isEnabled();
+        return myEnabled.isSelected() != settings.isEnabled()
+                || myDisablePluginXmlEditorTabNameExpansion.isSelected() != settings.isDisablePluginXmlEditorTabNameExpansion()
+                || myDisablePluginXmlIfSingleFile.isSelected() != settings.isDisablePluginXmlIfSingleFile();
     }
 
     public void apply(@NotNull PluginDevelopersToolboxSettings settings) {
         settings.setEnabled(myEnabled.isSelected());
+        settings.setDisablePluginXmlEditorTabNameExpansion(myDisablePluginXmlEditorTabNameExpansion.isSelected());
+        settings.setDisablePluginXmlIfSingleFile(myDisablePluginXmlIfSingleFile.isSelected());
     }
 
     public void reset(@NotNull PluginDevelopersToolboxSettings settings) {
         myEnabled.setSelected(settings.isEnabled());
+        myDisablePluginXmlEditorTabNameExpansion.setSelected(settings.isDisablePluginXmlEditorTabNameExpansion());
+        myDisablePluginXmlIfSingleFile.setSelected(settings.isDisablePluginXmlIfSingleFile());
     }
 
     @Override

@@ -14,7 +14,11 @@
  */
 package com.vladsch.pluginDevelopersToolbox;
 
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -22,11 +26,13 @@ import org.jetbrains.annotations.Nullable;
 
 @State(name = "PluginDevelopersToolboxSettings",
         storages = {
-                @Storage(file = "plugin-developers-toolbox.xml", scheme = StorageScheme.DIRECTORY_BASED)
+                @Storage("plugin-developers-toolbox.xml")
         })
-public class PluginDevelopersToolboxSettings implements ProjectComponent, PersistentStateComponent<PluginDevelopersToolboxSettings> {
+public class PluginDevelopersToolboxSettings implements ProjectComponent, PersistentStateComponent<PluginDevelopersToolboxSettings>, Disposable {
     //final private Project myProject;
     private boolean myEnabled;
+    private boolean myDisablePluginXmlEditorTabNameExpansion;
+    private boolean myDisablePluginXmlIfSingleFile;
 
     @NotNull
     public static PluginDevelopersToolboxSettings getInstance(@NotNull Project project) {
@@ -43,6 +49,22 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
 
     public PluginDevelopersToolboxSettings(@NotNull Project project) {
 
+    }
+
+    public boolean isDisablePluginXmlEditorTabNameExpansion() {
+        return myDisablePluginXmlEditorTabNameExpansion;
+    }
+
+    public void setDisablePluginXmlEditorTabNameExpansion(boolean disablePluginXmlEditorTabNameExpansion) {
+        myDisablePluginXmlEditorTabNameExpansion = disablePluginXmlEditorTabNameExpansion;
+    }
+
+    public boolean isDisablePluginXmlIfSingleFile() {
+        return myDisablePluginXmlIfSingleFile;
+    }
+
+    public void setDisablePluginXmlIfSingleFile(boolean disablePluginXmlIfSingleFile) {
+        myDisablePluginXmlIfSingleFile = disablePluginXmlIfSingleFile;
     }
 
     public PluginDevelopersToolboxSettings() {
@@ -65,12 +87,7 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
     }
 
     @Override
-    public void initComponent() {
-
-    }
-
-    @Override
-    public void disposeComponent() {
+    public void dispose() {
 
     }
 
@@ -98,11 +115,13 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
 
         PluginDevelopersToolboxSettings settings = (PluginDevelopersToolboxSettings) o;
 
-        return myEnabled == settings.myEnabled;
+        return myEnabled == settings.myEnabled
+                && myDisablePluginXmlEditorTabNameExpansion == settings.myDisablePluginXmlEditorTabNameExpansion
+                && myDisablePluginXmlIfSingleFile == settings.myDisablePluginXmlIfSingleFile;
     }
 
     @Override
     public int hashCode() {
-        return (myEnabled ? 1 : 0);
+        return (myEnabled ? 31 * 31 : 0) + (myDisablePluginXmlEditorTabNameExpansion ? 31 : 0) + (myDisablePluginXmlIfSingleFile ? 31 : 0);
     }
 }

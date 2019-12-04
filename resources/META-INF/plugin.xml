@@ -39,13 +39,20 @@
         ]]>
     </description>
 
-    <version>1.1.6</version>
+    <version>1.2.0</version>
     <idea-version since-build="163.15529"/>
     <depends>com.intellij.modules.lang</depends>
 
     <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.2.0 - Feature Release</h3>
+            <ul>
+                <li>Add: <code>Disable Editor Tab Title Expansion for plugin.xml files</code> to remove the plugin id from
+                    editor tab of <code>plugin.xml</code> files.</li>
+                <li>Add: <code>Only when single plugin.xml is open</code> to allow expansion of title when more than one
+                    <code>plugin.xml</code> file is open</li>
+            </ul>
             <h3>1.1.6 - Bug Fix</h3>
             <ul>
                 <li>Fix: plugin project settings were instantiated as service instead of project component.</li>
@@ -128,6 +135,7 @@
                              key="settings.project.name"
                              nonDefaultProject="false"
                              instance="com.vladsch.pluginDevelopersToolbox.ProjectConfigurable"/>
+        <editorTabTitleProvider implementation="com.vladsch.pluginDevelopersToolbox.DisablePluginXmlEditorTabNameExpansionProvider" order="first"/>
     </extensions>
 
     <actions>

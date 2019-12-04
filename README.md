@@ -3,16 +3,15 @@
 A collection of useful functions for plugin developers. I use it in the development of the
 idea-multimarkdown plugin.
 
-[Adobe](https://www.adobe.com) [PhotoShop](https://www.adobe.com/products/photoshop.html),
-[Illustrator](https://www.adobe.com/products/illustrator.html) and now discontinues [Slicy] post
-processors generate @2x resolution icons for files suffixed with `_dark` as `_dark@2x` suffixed,
-while the IDE expects `@2x_dark` suffix for these files.
+[Adobe][] [PhotoShop], [Illustrator] and now discontinued [Slicy] post processor, generate @2x
+resolution files suffixed with `_dark` as `_dark@2x` suffixed, while the IDE expects `@2x_dark`
+suffix for dark, high resolution files.
 
 This plugin detects when such files are created and changes their name to what the IDE expects.
 
 It also handles [Slicy] quirk of using groups to create sub-directories to allow some groups to
 be converted to concatenation of file name, reducing the amount of group renaming when copying
-icons.
+icons in [PhotoShop].
 
 Version 1.2 adds option to remove plugin id from plugin.xml editor tab title to reduce the
 editor tab real-estate used. The IDE always adds plugin id to the editor tab, which makes sense
@@ -100,7 +99,10 @@ The plugin augments this in the following way:
             newIconName@2x_dark.png
             newIconName_dark.png
 
+[Adobe]: https://www.adobe.com
+[Illustrator]: https://www.adobe.com/products/illustrator.html
 [macrabbit]: http://www.macrabbit.com
+[PhotoShop]: https://www.adobe.com/products/photoshop.html
 [Slicy]: http://www.macrabbit.com/slicy
 [Version Notes]: /resources/META-INF/VERSION.md
 

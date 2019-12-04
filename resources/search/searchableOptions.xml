@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+  <configurable id="PluginDevelopersToolbox.Settings.Project" configurable_name="Plugin Developer's Toolbox">
+    <option name="enabled" hit="Enabled" />
+    <option name="developer" hit="Plugin Developer's Toolbox" />
+    <option name="plugin" hit="Plugin Developer's Toolbox" />
+    <option name="s" hit="Plugin Developer's Toolbox" />
+    <option name="toolbox" hit="Plugin Developer's Toolbox" />
+  </configurable>
+</options>
+

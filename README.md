@@ -3,15 +3,38 @@
 A collection of useful functions for plugin developers. I use it in the development of the
 idea-multimarkdown plugin.
 
+[Adobe](https://www.adobe.com) [PhotoShop](https://www.adobe.com/products/photoshop.html),
+[Illustrator](https://www.adobe.com/products/illustrator.html) and now discontinues [Slicy] post
+processors generate @2x resolution icons for files suffixed with `_dark` as `_dark@2x` suffixed,
+while the IDE expects `@2x_dark` suffix for these files.
+
+This plugin detects when such files are created and changes their name to what the IDE expects.
+
+It also handles [Slicy] quirk of using groups to create sub-directories to allow some groups to
+be converted to concatenation of file name, reducing the amount of group renaming when copying
+icons.
+
+Version 1.2 adds option to remove plugin id from plugin.xml editor tab title to reduce the
+editor tab real-estate used. The IDE always adds plugin id to the editor tab, which makes sense
+for projects which contain multiple plugin.xml files. On a single plugin project makes such tab
+title expansion a waste of valuable editor tab space.
+
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/vsch/PluginDevelopersToolbox)
 
 [Version Notes]
 
+## Version 1.2 Release
+
+* Add: `Disable Editor Tab Title Expansion for plugin.xml files` to remove the plugin id from
+  editor tab of `plugin.xml` files.
+* Add: `Only when single plugin.xml is open` to allow expansion of title when more than one
+  `plugin.xml` file is open
+
 ## Version 1.1 Release
 
-:warning: The plugin now has a project setting to enable its operation under settings (Preferences) >
-Tools > Plugin Developer's Toolbox. It is disabled by default not to interfere with projects
-that do not need its functionality.
+:warning: The plugin now has a project setting to enable its operation under settings
+(Preferences) > Tools > Plugin Developer's Toolbox. It is disabled by default not to interfere
+with projects that do not need its functionality.
 
 ## Version 1.0 Initial Release
 
@@ -46,11 +69,7 @@ The plugin augments this in the following way:
    copy and rename 2 layer groups, and make sure you match the naming convention for each layer.
    This plugin will let you just create a template of layer groups to be reused for each icon:
 
-       iconName.+/
-           +@2x.png
-               icon layers go here
-           _dark@2x.png
-               icon layers go here
+    iconName.+/ +@2x.png icon layers go here _dark@2x.png icon layers go here
 
     To create a new icon, you only have to duplicate the iconName.+/ group and rename it to
     newIconName.+/ group. When you save the file Slicy will do its thing and create the

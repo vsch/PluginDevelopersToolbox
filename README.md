@@ -101,8 +101,8 @@ The plugin augments this in the following way:
 
 [Adobe]: https://www.adobe.com
 [Illustrator]: https://www.adobe.com/products/illustrator.html
-[macrabbit]: http://www.macrabbit.com
+[macrabbit]: https://www.macrabbit.com
 [PhotoShop]: https://www.adobe.com/products/photoshop.html
-[Slicy]: http://www.macrabbit.com/slicy
-[Version Notes]: /resources/META-INF/VERSION.md
+[Slicy]: https://macrabbit.com
+[Version Notes]: resources/META-INF/VERSION.md
 

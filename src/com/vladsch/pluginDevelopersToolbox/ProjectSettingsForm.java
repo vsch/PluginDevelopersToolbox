@@ -29,6 +29,8 @@ public class ProjectSettingsForm implements Disposable {
     private JBCheckBox myEnabled;
     private JBCheckBox myDisablePluginXmlEditorTabNameExpansion;
     private JBCheckBox myDisablePluginXmlIfSingleFile;
+    private JBCheckBox myDisablePluginGradleEditorTabNameExpansion;
+    private JBCheckBox myDisablePluginGradleIfSingleFile;
 
     public JComponent getComponent() {
         return myMainPanel;
@@ -36,6 +38,7 @@ public class ProjectSettingsForm implements Disposable {
 
     public ProjectSettingsForm() {
         myDisablePluginXmlEditorTabNameExpansion.addActionListener(e -> myDisablePluginXmlIfSingleFile.setEnabled(myDisablePluginXmlEditorTabNameExpansion.isSelected()));
+        myDisablePluginGradleEditorTabNameExpansion.addActionListener(e -> myDisablePluginGradleIfSingleFile.setEnabled(myDisablePluginGradleEditorTabNameExpansion.isSelected()));
     }
 
     private void createUIComponents() {
@@ -45,19 +48,26 @@ public class ProjectSettingsForm implements Disposable {
     public boolean isModified(@NotNull PluginDevelopersToolboxSettings settings) {
         return myEnabled.isSelected() != settings.isEnabled()
                 || myDisablePluginXmlEditorTabNameExpansion.isSelected() != settings.isDisablePluginXmlEditorTabNameExpansion()
-                || myDisablePluginXmlIfSingleFile.isSelected() != settings.isDisablePluginXmlIfSingleFile();
+                || myDisablePluginXmlIfSingleFile.isSelected() != settings.isDisablePluginXmlIfSingleFile()
+                || myDisablePluginGradleEditorTabNameExpansion.isSelected() != settings.isDisablePluginGradleEditorTabNameExpansion()
+                || myDisablePluginGradleIfSingleFile.isSelected() != settings.isDisablePluginGradleIfSingleFile()
+                ;
     }
 
     public void apply(@NotNull PluginDevelopersToolboxSettings settings) {
         settings.setEnabled(myEnabled.isSelected());
         settings.setDisablePluginXmlEditorTabNameExpansion(myDisablePluginXmlEditorTabNameExpansion.isSelected());
         settings.setDisablePluginXmlIfSingleFile(myDisablePluginXmlIfSingleFile.isSelected());
+        settings.setDisablePluginGradleEditorTabNameExpansion(myDisablePluginGradleEditorTabNameExpansion.isSelected());
+        settings.setDisablePluginGradleIfSingleFile(myDisablePluginGradleIfSingleFile.isSelected());
     }
 
     public void reset(@NotNull PluginDevelopersToolboxSettings settings) {
         myEnabled.setSelected(settings.isEnabled());
         myDisablePluginXmlEditorTabNameExpansion.setSelected(settings.isDisablePluginXmlEditorTabNameExpansion());
         myDisablePluginXmlIfSingleFile.setSelected(settings.isDisablePluginXmlIfSingleFile());
+        myDisablePluginGradleEditorTabNameExpansion.setSelected(settings.isDisablePluginGradleEditorTabNameExpansion());
+        myDisablePluginGradleIfSingleFile.setSelected(settings.isDisablePluginGradleIfSingleFile());
     }
 
     @Override

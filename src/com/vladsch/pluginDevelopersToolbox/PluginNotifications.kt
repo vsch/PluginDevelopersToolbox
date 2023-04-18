@@ -23,6 +23,7 @@ package com.vladsch.pluginDevelopersToolbox
 import com.intellij.ide.BrowserUtil
 import com.intellij.notification.NotificationDisplayType
 import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationListener
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
@@ -32,9 +33,9 @@ import com.intellij.xml.util.XmlStringUtil
 
 object PluginNotifications {
 
-    val NOTIFICATION_GROUP_UPDATE = NotificationGroup("pluginDevelopersToolbox Update", NotificationDisplayType.STICKY_BALLOON, true, null)
-    val NOTIFICATION_GROUP_ACTION = NotificationGroup("pluginDevelopersToolbox File Action", NotificationDisplayType.STICKY_BALLOON, true, null)
-    val NOTIFICATION_GROUP_ACTION_ERRORS = NotificationGroup("pluginDevelopersToolbox File Action with errors", NotificationDisplayType.STICKY_BALLOON, true, null)
+    val NOTIFICATION_GROUP_UPDATE = "PluginDevelopersToolbox Update"
+    val NOTIFICATION_GROUP_ACTION = "PluginDevelopersToolbox File Action"
+    val NOTIFICATION_GROUP_ACTION_ERRORS = "PluginDevelopersToolbox File Action with errors"
     val NOTIFICATION_GROUP_DEFAULT = NOTIFICATION_GROUP_ACTION
 
     val DEFAULT_STAR_ATTR = "BUY"
@@ -98,18 +99,19 @@ object PluginNotifications {
                          title: String = Bundle.message("plugin.name") + " (" + PluginProjectComponent.productVersion + ")",
                          listener: NotificationListener? = null,
                          notificationType: NotificationType = NotificationType.INFORMATION,
-                         issueNotificationGroup: NotificationGroup = NOTIFICATION_GROUP_DEFAULT,
+                         issueNotificationGroup: String = NOTIFICATION_GROUP_DEFAULT,
                          project: Project? = null
     ) {
 
-        val basicListener = listener ?: NotificationListener { notification, hyperlinkEvent ->
+        val basicListener = listener ?: NotificationListener { _, hyperlinkEvent ->
             //notification.expire();
             if (hyperlinkEvent.url != null) {
                 BrowserUtil.browse(hyperlinkEvent.url.toString())
             }
         }
 
-        issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, basicListener).notify(project)
+        NotificationGroupManager.getInstance().getNotificationGroup(issueNotificationGroup)
+            .createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, basicListener).notify(project)
     }
 }
 

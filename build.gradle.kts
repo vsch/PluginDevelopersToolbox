@@ -6,7 +6,7 @@ fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
 val javaVersion = "11"
-val pluginSinceBuild = "203"
+val pluginSinceBuild = "203.5981.155"
 val pluginUntilBuild = ""
 val pluginVersion = "1.3.0"
 
@@ -43,22 +43,22 @@ dependencies {
 sourceSets {
     main {
         java {
-            setSrcDirs(mutableListOf("src/main/java"))
-            resources.setSrcDirs(mutableListOf("src/main/resources", "src/main/resources-flex"))
+            setSrcDirs(mutableListOf("src"))
+            resources.setSrcDirs(mutableListOf("resources"))
         }
 
         kotlin {
-            setSrcDirs(mutableListOf("src/main/java"))
+            setSrcDirs(mutableListOf("src"))
         }
     }
 
     test {
         java {
-            setSrcDirs(mutableListOf("src/test/java"))
+            setSrcDirs(mutableListOf("test"))
         }
 
         kotlin {
-            setSrcDirs(mutableListOf("src/test/java"))
+            setSrcDirs(mutableListOf("test"))
         }
     }
 
@@ -72,6 +72,10 @@ tasks { // Set the JVM compatibility versions
 
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = javaVersion
+    }
+    
+    buildSearchableOptions {
+        enabled = true
     }
 
     processResources {

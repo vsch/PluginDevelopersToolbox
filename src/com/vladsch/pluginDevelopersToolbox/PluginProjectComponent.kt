@@ -27,57 +27,49 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.components.ProjectComponent
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.*
+import com.intellij.openapi.roots.ProjectFileIndex
+import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import com.intellij.util.Alarm
-import org.jetbrains.annotations.NonNls
 import java.io.IOException
 import java.util.regex.Pattern
 
-class PluginProjectComponent(val myProject: Project) : ProjectComponent, VirtualFileListener, Disposable, Runnable {
+@Service(Service.Level.PROJECT)
+class PluginProjectComponent(val myProject: Project) : BulkFileListener, Disposable, Runnable {
+
     private val logger = Logger.getInstance("com.vladsch.pluginDevelopersToolbox")
 
     private val mySwingAlarm = Alarm(Alarm.ThreadToUse.SWING_THREAD, this)
-    private val REQUESTS_LOCK = Object()
+    private val myRequestsLock = Object()
     private var myLastRequest: Runnable? = null
     private val myNotifyList = StringBuilder()
     private val myNotifyMessage = StringBuilder()
     private var myLastParentItem: String? = null
     private var myHadErrors = false
 
+    init {
+        val messageBusConnection = myProject.messageBus.connect(this)
+        messageBusConnection.subscribe(VirtualFileManager.VFS_CHANGES, this)
+
+        Disposer.register(this, messageBusConnection)
+    }
+
     override fun dispose() {
-
-    }
-
-    override fun projectOpened() {
-        VirtualFileManager.getInstance().addVirtualFileListener(this)
-    }
-
-    override fun projectClosed() {
-        VirtualFileManager.getInstance().removeVirtualFileListener(this)
-    }
-
-    @NonNls
-    override fun getComponentName(): String {
-        return this.javaClass.name
-    }
-
-    override fun initComponent() {
-
-    }
-
-    override fun disposeComponent() {
-
     }
 
     override fun run() {
-        var message = ""
-        var hadErrors = false
-        synchronized (REQUESTS_LOCK) {
+        var message: String
+        var hadErrors: Boolean
+
+        synchronized(myRequestsLock) {
             myLastRequest = null
 
             if (myLastParentItem != null) {
@@ -94,12 +86,22 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             myHadErrors = false
         }
 
-        val messageHtml = PluginNotifications.processDashStarPage(message, Bundle.message("plugin.action.files-moved.title"), Bundle.message("plugin.action.files-moved.subtitle"))
+        val messageHtml = PluginNotifications.processDashStarPage(
+            message,
+            Bundle.message("plugin.action.files-moved.title"),
+            Bundle.message("plugin.action.files-moved.subtitle")
+        )
         //        println(messageHtml)
         val notificationType = if (hadErrors) NotificationType.WARNING else NotificationType.INFORMATION
-        val notificationGroup = if (hadErrors) PluginNotifications.NOTIFICATION_GROUP_ACTION_ERRORS else PluginNotifications.NOTIFICATION_GROUP_ACTION
+        val notificationGroup =
+            if (hadErrors) PluginNotifications.NOTIFICATION_GROUP_ACTION_ERRORS else PluginNotifications.NOTIFICATION_GROUP_ACTION
         logger.debug("generating notification")
-        PluginNotifications.makeNotification(messageHtml, project = this.myProject, notificationType = notificationType, issueNotificationGroup = notificationGroup)
+        PluginNotifications.makeNotification(
+            messageHtml,
+            project = this.myProject,
+            notificationType = notificationType,
+            issueNotificationGroup = notificationGroup
+        )
     }
 
     private fun openParentItem(parentItem: String) {
@@ -107,26 +109,26 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         var parentItem = parentItem
         myNotifyMessage.append(PluginNotifications.processDashStarItems(myNotifyList.toString()))
         val colorOption: String =
-                if (parentItem.startsWith("~")) {
-                    parentItem = parentItem.removePrefix("~").wrapWith("<b>", "</b>")
-                    " style=\"color: [[SPECIALS]];\""
-                } else {
-                    ""
-                }
-        myNotifyMessage.appendln(PluginNotifications.applyHtmlColors("\n<li$colorOption>$parentItem\n<ul style=\"margin-top: 0px;\">"))
+            if (parentItem.startsWith("~")) {
+                parentItem = parentItem.removePrefix("~").wrapWith("<b>", "</b>")
+                " style=\"color: [[SPECIALS]];\""
+            } else {
+                ""
+            }
+        myNotifyMessage.appendLine(PluginNotifications.applyHtmlColors("\n<li$colorOption>$parentItem\n<ul style=\"margin-top: 0px;\">"))
         myNotifyList.delete(0, myNotifyList.length)
         myLastParentItem = parentItem
     }
 
     private fun closeParentItem() {
         myNotifyMessage.append(PluginNotifications.processDashStarItems(myNotifyList.toString()))
-        myNotifyMessage.appendln("\n</ul></li>")
+        myNotifyMessage.appendLine("\n</ul></li>")
         myNotifyList.delete(0, myNotifyList.length)
         myLastParentItem = null
     }
 
-    fun addNotificationItem(item: String, parentItem: String?) {
-        synchronized (REQUESTS_LOCK) {
+    private fun addNotificationItem(item: String, parentItem: String?) {
+        synchronized(myRequestsLock) {
             if (item.startsWith("*")) myHadErrors = true
 
             val lastRequest = myLastRequest
@@ -142,7 +144,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 openParentItem(parentItem)
             }
 
-            myNotifyList.appendln(item)
+            myNotifyList.appendLine(item)
 
             val nextRequest: Runnable = this
             myLastRequest = nextRequest
@@ -150,27 +152,33 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         }
     }
 
-    // detect creation of files with the format: (.*)_dark@2x\.(.*) and rename the file to $1@2x_dark.$2
-    override fun propertyChanged(event: VirtualFilePropertyEvent) {
-        //updateHighlighters();
-    }
-
-    override fun contentsChanged(event: VirtualFileEvent) {
-        //updateHighlighters();
-    }
-
-    fun invokeLaterInWriteAction(runnable: () -> Unit) {
+    private fun invokeLaterInWriteAction(runnable: () -> Unit) {
         ApplicationManager.getApplication().invokeLater {
             WriteCommandAction.runWriteCommandAction(myProject, runnable)
         }
     }
 
-    override fun fileCreated(event: VirtualFileEvent) {
-        if (!PluginDevelopersToolboxSettings.getInstance(myProject).isEnabled) return
+    override fun before(events: MutableList<out VFileEvent>) {
+    }
 
-        val parent = event.parent ?: return
-        val file = event.file
-        if (!event.isFromRefresh || !file.isValid || myProject.basePath == null || !parent.path.startsWith(myProject.basePath!!.suffixWith('/'))) return // not in our project
+    override fun after(events: MutableList<out VFileEvent>) {
+        if (!PluginDevelopersToolboxSettings.getInstance(myProject).isEnabled) return
+        val projectFileIndex = ProjectFileIndex.getInstance(myProject)
+
+        events.forEach {
+            if (it is VFileCreateEvent && it.file != null && projectFileIndex.isInContent(it.file!!)) fileCreated(it)
+        }
+    }
+
+    private fun fileCreated(event: VFileCreateEvent) {
+        val file = event.file ?: return
+        val parent = event.parent
+
+
+
+        if (!event.isFromRefresh || !file.isValid || myProject.basePath == null
+            || !parent.path.startsWith(myProject.basePath!!.suffixWith('/'))
+        ) return // not in our project
 
         if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
             invokeLaterInWriteAction {
@@ -231,7 +239,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             if (!file.isDirectory && file.extension in IMAGE_EXTENSIONS) {
                 // our candidate
                 var removedPrefix = file.nameWithoutExtension.removePrefix("+")
-                removedPrefix = removedPrefix.replace("_dark@2x","@2x_dark")
+                removedPrefix = removedPrefix.replace("_dark@2x", "@2x_dark")
                 val newName = namePrefix + removedPrefix + '.' + file.extension
                 if (!processFile(file, newName, parent, parentItem)) {
                     allProcessed = false
@@ -267,7 +275,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 var skipped = oldContents.size == newContents.size
 
                 if (skipped) {
-                    for (i in 0..oldContents.size - 1) {
+                    for (i in 0 .. oldContents.size - 1) {
                         if (oldContents[i] != newContents[i]) {
                             skipped = false
                             break
@@ -299,11 +307,14 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
             try {
                 file.rename(this, newName)
                 try {
-                    if (file.parent !== parent) file.move(this, parent)
+                    if (file.parent != parent) file.move(this, parent)
                     fileProcessed = true
                     addNotificationItem(Bundle.message("plugin.action.file-moved", newName), parentItem)
                 } catch (e: IOException) {
-                    addNotificationItem(Bundle.message("plugin.action.file-move-failed", file.name, file.parent.name, parent.name), parentItem)
+                    addNotificationItem(
+                        Bundle.message("plugin.action.file-move-failed", file.name, file.parent.name, parent.name),
+                        parentItem
+                    )
                     logger.info(e)
                 }
             } catch (e: IOException) {
@@ -313,55 +324,19 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
         return fileProcessed
     }
 
-    override fun fileDeleted(event: VirtualFileEvent) {
-        //updateHighlighters();
-    }
-
-    override fun fileMoved(event: VirtualFileMoveEvent) {
-        //updateHighlighters();
-    }
-
-    override fun fileCopied(event: VirtualFileCopyEvent) {
-        //updateHighlighters();
-    }
-
-    override fun beforePropertyChange(event: VirtualFilePropertyEvent) {
-        //String s = event.getPropertyName();
-        //int tmp = 0;
-    }
-
-    override fun beforeContentsChange(event: VirtualFileEvent) {
-        //int tmp = 0;
-    }
-
-    override fun beforeFileDeletion(event: VirtualFileEvent) {
-        //int tmp = 0;
-    }
-
-    override fun beforeFileMovement(event: VirtualFileMoveEvent) {
-        //int tmp = 0;
-    }
-
     companion object {
+
         private val PLUGIN_ID = "com.vladsch.PluginDevelopersToolbox"
-        @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        private val logger = Logger.getInstance("com.vladsch.slicy-mover")
+
+        @JvmField
+        val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
 
         @JvmStatic
         val productName: String
             get() = PLUGIN_ID.substring(PLUGIN_ID.lastIndexOf('.') + 1)
 
-        @JvmStatic fun getPluginDescriptor(pluginId: String): IdeaPluginDescriptor? {
-            val plugins = PluginManager.getPlugins()
-            for (plugin in plugins) {
-                if (pluginId == plugin.pluginId.idString) {
-                    return plugin
-                }
-            }
-            return null
-        }
-
-        @JvmStatic val pluginDescriptor: IdeaPluginDescriptor
+        @JvmStatic
+        val pluginDescriptor: IdeaPluginDescriptor
             get() {
                 val plugins = PluginManager.getPlugins()
                 for (plugin in plugins) {
@@ -380,7 +355,7 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 val version = pluginDescriptor.version
                 // truncate version to 3 digits and if had more than 3 append .x, that way
                 // no separate product versions need to be created
-                val parts = version.split(delimiters = *charArrayOf('.'), limit = 4)
+                val parts = version.split(delimiters = charArrayOf('.'), limit = 4)
                 if (parts.size <= 3) {
                     return version
                 }
@@ -388,24 +363,5 @@ class PluginProjectComponent(val myProject: Project) : ProjectComponent, Virtual
                 val newVersion = parts.subList(0, 3).reduce { total, next -> "$total.$next" }
                 return "$newVersion.x"
             }
-
-        @JvmStatic
-        fun getPluginPath(): String? {
-            val variants = arrayOf(PathManager.getHomePath(), PathManager.getPluginsPath())
-
-            for (variant in variants) {
-                val path = "$variant/$productName"
-                if (LocalFileSystem.getInstance().findFileByPath(path) != null) {
-                    return path
-                }
-            }
-            return null
-        }
-
-        @JvmStatic
-        fun getPluginFilePath(fileName: String): String? {
-            val path = getPluginPath()
-            return path.ifNotNull { path.suffixWith('/') + fileName }
-        }
     }
 }

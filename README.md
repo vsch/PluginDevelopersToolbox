@@ -104,5 +104,5 @@ The plugin augments this in the following way:
 [macrabbit]: https://www.macrabbit.com
 [PhotoShop]: https://www.adobe.com/products/photoshop.html
 [Slicy]: https://macrabbit.com
-[Version Notes]: resources/META-INF/VERSION.md
+[Version Notes]: VERSION.md
 

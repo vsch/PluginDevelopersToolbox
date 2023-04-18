@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2015-2016 Vladimir Schneider <vladimir.schneider@gmail.com>
+  ~ Copyright (c) 2015-2023 Vladimir Schneider <vladimir.schneider@gmail.com>
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -22,36 +22,48 @@
 <idea-plugin url="http://github.com/vsch/PluginDevelopersToolbox">
     <id>com.vladsch.PluginDevelopersToolbox</id>
     <name>Plugin Developer's Toolbox</name>
-    <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
+    <vendor email="vladimir.schneider@gmail.com" url="https://github.com/vsch">Vladimir Schneider</vendor>
 
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
             <p><img
                   src="https://raw.githubusercontent.com/vsch/PluginDevelopersToolbox/master/assets/images/ScreenShot_sequence_1x.png"
                   border="0" width="414" height="155" alt="Screenshot"></p>
-            <p>For now only one very useful function: <a href="http://www.macrabbit.com/slicy">Slicy</a> file
-                mover/renamer.</p>
+            <p>File mover/renamer: <code>_dark@2x</code> to <code>@2x_dark</code>, to rename files from discontinued Slicy from
+                <a href="https://www.macrabbit.com">macrabbit</a>. It also applies to Adobe Illustrator exported file names.</p>
+            <p>Optionally removes plugin identifier from <code>plugin.xml</code> editor tab to reduce tab size, and does
+                the same for project name in gradle build and gradle settings file editor tabs.</p>
             <p><strong>Plugin website:
-                <a href="http://github.com/vsch/PluginDevelopersToolbox">Plugin Developer&rsquo;s Toolbox GitHub Repo</a></strong></p>
+                <a href="https://github.com/vsch/PluginDevelopersToolbox">Plugin Developer&rsquo;s Toolbox GitHub Repo</a></strong></p>
             <p><strong>Bug tracking &amp; feature requests:
                 <a href="https://github.com/vsch/PluginDevelopersToolbox/issues">Plugin Developer&rsquo;s Toolbox GitHub Issues</a></strong></p>
         </div>
         ]]>
     </description>
 
-    <version>1.2.0</version>
-    <idea-version since-build="163.15529"/>
+    <version>1.3.0</version>
+    <idea-version since-build="203.5981.155"/>
     <depends>com.intellij.modules.lang</depends>
 
-    <!--<xi:include href="/META-INF/version-notes.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>1.3.0 - Feature Release</h3>
+            <ul>
+                <li>Add: <code>Disable Editor Tab Title Expansion for build.gradle(.kts) and settings.gradle(.kts) files</code> to remove the project name from editor tab of gradle build files.</li>
+                <li>Add: <code>Only when a single file with the same name is open</code> to allow expansion of title when
+                    more than one file with the same is open</li>
+                <li>Change: migrate to gradle build</li>
+                <li>Fix: deprecated API use</li>
+                <li>Change: require <code>203.5981.155</code> build of IDE, <code>2020.3.4</code></li>
+            </ul>
             <h3>1.2.0 - Feature Release</h3>
             <ul>
                 <li>Add: <code>Disable Editor Tab Title Expansion for plugin.xml files</code> to remove the plugin id from
-                    editor tab of <code>plugin.xml</code> files.</li>
+                    editor tab of <code>plugin.xml</code> files.
+                </li>
                 <li>Add: <code>Only when single plugin.xml is open</code> to allow expansion of title when more than one
-                    <code>plugin.xml</code> file is open</li>
+                    <code>plugin.xml</code> file is open
+                </li>
             </ul>
             <h3>1.1.6 - Bug Fix</h3>
             <ul>
@@ -72,12 +84,12 @@
             </ul>
             <h3>1.0.7 - Minor Tweaks &amp; Bug Fix</h3>
             <ul>
-                <li>Fix: slicy files in newly created directories that ended in <code>_dark@2x</code> but did not equal this   string would not be properly processed.</li>
+                <li>Fix: slicy files in newly created directories that ended in <code>_dark@2x</code> but did not equal this string would not be properly processed.</li>
             </ul>
             <h3>1.0.6 - Minor Tweaks &amp; Bug Fix</h3>
             <ul>
                 <li>Add: different color to newly created files</li>
-                <li>Fix: slicy files in newly created directories would be ignored unless the directory name was   used as a splice to the file name.</li>
+                <li>Fix: slicy files in newly created directories would be ignored unless the directory name was used as a splice to the file name.</li>
             </ul>
             <h3>1.0.5 - Bug Fix</h3>
             <ul>
@@ -110,36 +122,29 @@
             <h3>1.0.0 - Initial Release</h3>
             <ul>
                 <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file renamer: from slicy's <code>_dark@2x.ext</code> to <code>@2x_dark.ext</code> format of IntelliJ</li>
-                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see  <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
+                <li>Add: <a href="http://www.macrabbit.com/slicy">Slicy</a> file mover: move files created with sub-directory layer groups to files for IntelliJ icon naming conventions. see <a href="https://github.com/vsch/PluginDevelopersToolbox/blob/master/README.md">Readme</a></li>
             </ul>
 
         </div>
         ]]></change-notes>
 
-    <project-components>
-        <!-- Plugin's project components -->
-        <component>
-            <implementation-class>com.vladsch.pluginDevelopersToolbox.PluginProjectComponent</implementation-class>
-        </component>
-        <component>
-            <implementation-class>com.vladsch.pluginDevelopersToolbox.PluginDevelopersToolboxSettings</implementation-class>
-            <loadForDefaultProject/>
-        </component>
-    </project-components>
+    <applicationListeners>
+        <listener class="com.vladsch.pluginDevelopersToolbox.PluginApplicationComponent"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
         <projectConfigurable id="PluginDevelopersToolbox.Settings.Project"
                              groupId="tools"
                              bundle="com.vladsch.pluginDevelopersToolbox.localization.strings"
                              key="settings.project.name"
                              nonDefaultProject="false"
                              instance="com.vladsch.pluginDevelopersToolbox.ProjectConfigurable"/>
-        <editorTabTitleProvider implementation="com.vladsch.pluginDevelopersToolbox.DisablePluginXmlEditorTabNameExpansionProvider" order="first"/>
+        <editorTabTitleProvider implementation="com.vladsch.pluginDevelopersToolbox.DisablePluginTabNameExpansionProvider" order="first"/>
+        <projectService serviceImplementation="com.vladsch.pluginDevelopersToolbox.PluginDevelopersToolboxSettings"/>
+
+        <notificationGroup id="PluginDevelopersToolbox Update" displayType="STICKY_BALLOON" isLogByDefault="true"/>
+        <notificationGroup id="PluginDevelopersToolbox File Action" displayType="STICKY_BALLOON" isLogByDefault="true"/>
+        <notificationGroup id="PluginDevelopersToolbox File Action with errors" displayType="STICKY_BALLOON" isLogByDefault="true"/>
     </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
-
 </idea-plugin>

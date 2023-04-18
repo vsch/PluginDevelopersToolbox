@@ -28,15 +28,17 @@ import org.jetbrains.annotations.Nullable;
         storages = {
                 @Storage("plugin-developers-toolbox.xml")
         })
-public class PluginDevelopersToolboxSettings implements ProjectComponent, PersistentStateComponent<PluginDevelopersToolboxSettings>, Disposable {
+public class PluginDevelopersToolboxSettings implements PersistentStateComponent<PluginDevelopersToolboxSettings>, Disposable {
     //final private Project myProject;
     private boolean myEnabled;
     private boolean myDisablePluginXmlEditorTabNameExpansion;
     private boolean myDisablePluginXmlIfSingleFile;
+    private boolean myDisablePluginGradleEditorTabNameExpansion;
+    private boolean myDisablePluginGradleIfSingleFile;
 
     @NotNull
     public static PluginDevelopersToolboxSettings getInstance(@NotNull Project project) {
-        return project.getComponent(PluginDevelopersToolboxSettings.class);
+        return project.getService(PluginDevelopersToolboxSettings.class);
     }
 
     public boolean isEnabled() {
@@ -67,34 +69,29 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
         myDisablePluginXmlIfSingleFile = disablePluginXmlIfSingleFile;
     }
 
+    public boolean isDisablePluginGradleEditorTabNameExpansion() {
+        return myDisablePluginGradleEditorTabNameExpansion;
+    }
+
+    public void setDisablePluginGradleEditorTabNameExpansion(boolean disablePluginGradleEditorTabNameExpansion) {
+        myDisablePluginGradleEditorTabNameExpansion = disablePluginGradleEditorTabNameExpansion;
+    }
+
+    public boolean isDisablePluginGradleIfSingleFile() {
+        return myDisablePluginGradleIfSingleFile;
+    }
+
+    public void setDisablePluginGradleIfSingleFile(boolean disablePluginGradleIfSingleFile) {
+        myDisablePluginGradleIfSingleFile = disablePluginGradleIfSingleFile;
+    }
+
     public PluginDevelopersToolboxSettings() {
-
-    }
-
-    @Override
-    public void noStateLoaded() {
-
-    }
-
-    @Override
-    public void projectOpened() {
-
-    }
-
-    @Override
-    public void projectClosed() {
 
     }
 
     @Override
     public void dispose() {
 
-    }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return "PluginDevelopersToolboxSettings";
     }
 
     @Nullable
@@ -104,7 +101,7 @@ public class PluginDevelopersToolboxSettings implements ProjectComponent, Persis
     }
 
     @Override
-    public void loadState(PluginDevelopersToolboxSettings state) {
+    public void loadState(@NotNull PluginDevelopersToolboxSettings state) {
         XmlSerializerUtil.copyBean(state, this);
     }
 

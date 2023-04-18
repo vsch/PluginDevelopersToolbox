@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2023 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2016 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +9,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   https://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,19 +18,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package icons;
 
-import com.intellij.openapi.util.IconLoader;
+package com.vladsch.pluginDevelopersToolbox
 
-import javax.swing.*;
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManagerListener
 
-public class PluginDevelopersToolboxIcons {
-    private static Icon load(String path) {
-        return IconLoader.getIcon(path, PluginDevelopersToolboxIcons.class);
+class PluginApplicationComponent() : ProjectManagerListener, Disposable {
+
+    override fun dispose() {
     }
 
-    public static class EditorActions {
-        //public static final Icon Strike_through = load("/icons/editor_actions/Strike_through.png"); // 16x16
+    override fun projectOpened(project: Project) {
+        project.getService(PluginProjectComponent::class.java);
     }
 
+    override fun projectClosing(project: Project) {
+        val projectComponent: PluginProjectComponent = project.getService(PluginProjectComponent::class.java);
+        projectComponent.dispose()
+    }
 }

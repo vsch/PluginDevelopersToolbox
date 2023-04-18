@@ -2,6 +2,7 @@
 
 [TOC]: # " "
 
+- [1.3.0 - Feature Release](#130---feature-release)
 - [1.2.0 - Feature Release](#120---feature-release)
 - [1.1.6 - Bug Fix](#116---bug-fix)
 - [1.1.4 - Fix 2016.3 Compatibility](#114---fix-20163-compatibility)
@@ -16,6 +17,16 @@
 - [1.0.1 - Bug Fix and Notification Cleanup](#101---bug-fix-and-notification-cleanup)
 - [1.0.0 - Initial Release](#100---initial-release)
 
+
+### 1.3.0 - Feature Release
+
+* Add: `Disable Editor Tab Title Expansion for build.gradle(.kts) and settings.gradle(.kts)
+  files` to remove the project name from editor tab of gradle build files.
+* Add: `Only when a single file with the same name is open` to allow expansion of title when
+  more than one file with the same is open
+* Change: migrate to gradle build
+* Fix: deprecated API use
+* Change: require `203.5981.155` build of IDE, `2020.3.4`
 
 ### 1.2.0 - Feature Release
 

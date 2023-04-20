@@ -1,22 +1,13 @@
-@file:Suppress("PublicApiImplicitType")
-
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-fun properties(key: String) = providers.gradleProperty(key)
-fun environment(key: String) = providers.environmentVariable(key)
-
-val javaVersion = "11"
-val pluginSinceBuild = "203.5981.155"
-val pluginUntilBuild = ""
-val pluginVersion = "1.3.0"
-
-//ant.importBuild("release.xml")
-
 plugins {
-    id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.8.20"
-    id("org.jetbrains.intellij") version "1.13.3"
+    id "java"
+    id "org.jetbrains.kotlin.jvm" version "1.8.20"
+    id "org.jetbrains.intellij" version "1.13.3"
 }
+
+def javaVersion = "11"
+def pluginSinceBuild = "203.5981.155"
+def pluginUntilBuild = ""
+def pluginVersion = "1.3.0"
 
 group = "com.vladsch.PluginDevelopersToolbox"
 version = pluginVersion
@@ -29,10 +20,11 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2020.3.4")
-    type.set("IC") // Target IDE Platform
-
-    plugins.set(listOf())
+    version = "2020.3.4"
+    type = "IC" // Target IDE Platform
+    
+    plugins = []
+    downloadSources = false
 }
 
 dependencies {
@@ -43,36 +35,38 @@ dependencies {
 sourceSets {
     main {
         java {
-            setSrcDirs(mutableListOf("src"))
-            resources.setSrcDirs(mutableListOf("resources"))
+            srcDirs = ["src"]
+            resources.srcDirs  = ["resources"]
         }
-
+                                             c
         kotlin {
-            setSrcDirs(mutableListOf("src"))
+            srcDirs = ["src"]
         }
     }
 
     test {
         java {
-            setSrcDirs(mutableListOf("test"))
+            srcDirs = ["test"]
         }
 
         kotlin {
-            setSrcDirs(mutableListOf("test"))
+            srcDirs = ["test"]
         }
     }
 
 }
 
-tasks { // Set the JVM compatibility versions
-    withType<JavaCompile> {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
-    }
+// Set the JVM compatibility versions
+compileJava {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
+}
 
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = javaVersion
-    }
+compileKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+
+tasks { 
     
     buildSearchableOptions {
         enabled = true
